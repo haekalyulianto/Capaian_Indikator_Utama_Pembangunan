@@ -1,9 +1,9 @@
+from os import name
 import pandas as pd
 import streamlit as st
 import json
 import plotly.graph_objects as go
 from streamlit_plotly_events import plotly_events
-
 import util
 import mapping
 
@@ -22,7 +22,7 @@ with tab1:
         tahun = st.selectbox('Tahun', ([str(x) for x in range(2010, 2022)]))
 
     with inputcol2:
-        target = st.selectbox('Target', ('Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Gini Rasio', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka'))
+        target = st.selectbox('Indikator', ('Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka'))
 
     filetarget = 'Indeks Pembangunan Manusia.xlsx'
     column = ['IPM']
@@ -30,7 +30,7 @@ with tab1:
     if (target == 'Tingkat Kemiskinan'):
         filetarget = 'persentasemiskin.xlsx'
         column = ['Kemiskinan']
-    elif (target == 'Gini Rasio'):
+    elif (target == 'Rasio Gini'):
         filetarget = 'giniratio.xlsx'
         column = ['Gini']
     elif (target == 'Laju Pertumbuhan Ekonomi'):
@@ -52,10 +52,7 @@ with tab1:
     #isi data target
     for i in provinsi:
         for j in column:
-            if ((column[0] == 'IPM') or (column[0] == 'LPE')):
-                exec('{}["{}"]={}.loc[{}:{},2010:2021].T'.format(i,j,j,countX,countY))
-            else:
-                exec('{}["{}"]={}.loc[{}:{},2021:2010].T'.format(i,j,j,countX,countY))
+            exec('{}["{}"]={}.loc[{}:{},2010:2021].T'.format(i,j,j,countX,countY))
         #countX+=1
     countY+=1
 
@@ -88,23 +85,29 @@ with tab1:
     st.success('Data ' + target + ' per Provinsi')
     exec('df_mapping = {}'.format(column[0]))
     df, indomap = util.read_map(df_mapping, provinsi)
+   
+    col1, col2 = st.columns((4, 1))
+    with col1:
+        peta = util.plot_map(df, indomap, tahun)
+        selected_points = plotly_events(peta)
 
-    peta = util.plot_map(df, indomap, tahun)
-    selected_points = plotly_events(peta)
+        # Visualisasi Peta
+        if(len(selected_points) > 0):
+            idx = int(selected_points[0]['pointIndex'])
 
-    # Visualisasi Peta
-    if(len(selected_points) > 0):
-        idx = int(selected_points[0]['pointIndex'])
+            name_provinsi = df.iloc[idx]['provinsi']
+            selected_provinsi = df['variabel'].iloc[idx]
 
-        name_provinsi = df.iloc[idx]['provinsi']
-        selected_provinsi = df['variabel'].iloc[idx]
-
-        #exec('st.write({})'.format(selected_provinsi))
-        exec('results = util.prediction({})'.format(selected_provinsi))
-
+            #exec('st.write({})'.format(selected_provinsi))
+            exec('results = util.prediction({})'.format(selected_provinsi))
+    
+    with col2:
+        if 'name_provinsi' in locals():
+            st.subheader('Provinsi ' + name_provinsi)
+    
 with tab2:
     if 'name_provinsi' in locals():
-        st.subheader('Capaian ' + column[0] + ' pada provinsi ' + name_provinsi)
+        st.subheader('Capaian ' + column[0] + ' pada Provinsi ' + name_provinsi)
     if 'results' in locals():
         st.success('Hasil Prediksi ' + column[0])
         col1, col2, col3, col4 = st.columns(4)
@@ -116,7 +119,7 @@ with tab2:
             st.write(results['y_pred'])
         col3.metric("Mean Square Error (MSE)", str('{:.2f}'.format(results['MSE'])))
 
-        st.success('Fitur Importance')
+        st.success('Seleksi Fitur')
         col1, col2 = st.columns(2)
         with col1:
             st.write('Feature Importance')
@@ -124,7 +127,7 @@ with tab2:
             #df.style.applymap(is_temp_valid, subset=['celsius_temperature'])
         with col2:
             st.write('Best Features')
-            st.write(results['dfprov'])
+            st.write(results['dfprov'].iloc[:, 1:])
 
         st.success('Hasil Prediksi dengan Best Features')
         col1, col2, col3 = st.columns(3)
@@ -136,18 +139,17 @@ with tab2:
             st.write(results['y_pred Tahap 2'])
         col3.metric("Mean Square Error (MSE)", str('{:.2f}'.format(results['mse Tahap 2'])))
 
-        st.success('Simulasi Kalkulator')
+        st.success('Simulasi Belanja Pemerintah Pusat Per Fungsi terhadadap Capaian ' + column[0])
         with st.form("my_form"):
             col1, col2, col3 = st.columns(3)
             with col1:
-                f1 = st.number_input('Fitur ' + results['dfprov'].columns[1])
+                f1 = st.number_input('Anggaran ' + results['dfprov'].columns[1])
             with col2:
-                f2 = st.number_input('Fitur ' + results['dfprov'].columns[2])
+                f2 = st.number_input('Anggaran ' + results['dfprov'].columns[2])
             with col3:
-                f3 = st.number_input('Fitur ' + results['dfprov'].columns[3])
+                f3 = st.number_input('Anggaran ' + results['dfprov'].columns[3])
                 
             submitted = st.form_submit_button("Submit")
             if submitted:
                 predictionresult = (f1*results['regressor.coef_'][0][0] + f2*results['regressor.coef_'][0][1] + f3*results['regressor.coef_'][0][2])
-                st.metric('Hasil Prediksi:', str(predictionresult))
-                
+                st.metric('Prediksi Capaian ' +column[0]+':', str(predictionresult))
