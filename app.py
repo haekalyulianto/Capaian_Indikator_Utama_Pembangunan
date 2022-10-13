@@ -1,17 +1,14 @@
-from os import name
 import pandas as pd
 import streamlit as st
-import json
-import plotly.graph_objects as go
 from streamlit_plotly_events import plotly_events
 import util
 import mapping
 
 # Konfigurasi Halaman
 st.set_page_config(page_title="Peta Indonesia", layout="wide")
-st.title('Capaian Indikator Utama Pembangunan')
+st.title('Capaian Indikator Utama Pembangunan di Indonesia')
 
-tab1, tab2 = st.tabs(["Pemrosesan Data", "Hasil"])
+tab1, tab2, tab3 = st.tabs(["Visualisasi Data", "Prediksi dan Seleksi Fitur", "Simulasi"])
 # Pemrosesan Data
 #df = util.read_and_preprocess_data('IPM')
 # =================================================================
@@ -19,7 +16,7 @@ with tab1:
     inputcol1, inputcol2 = st.columns(2)
 
     with inputcol1:
-        tahun = st.selectbox('Tahun', ([str(x) for x in range(2010, 2022)]))
+        tahun = st.selectbox('Tahun', ([str(x) for x in range(2021, 2009, -1)]))
 
     with inputcol2:
         target = st.selectbox('Indikator', ('Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka'))
@@ -103,44 +100,58 @@ with tab1:
     
     with col2:
         if 'name_provinsi' in locals():
-            st.subheader('Provinsi ' + name_provinsi)
+            st.subheader('Provinsi Dipilih: ' + '\n' + name_provinsi)
     
 with tab2:
     if 'name_provinsi' in locals():
-        st.subheader('Capaian ' + column[0] + ' pada Provinsi ' + name_provinsi)
+        st.subheader('Capaian ' + target + ' pada Provinsi ' + name_provinsi)
     if 'results' in locals():
-        st.success('Hasil Prediksi ' + column[0])
+        st.success('Hasil Prediksi ' + target)
+        #col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4, col5 = st.columns(5)
+        with col1:
+            st.write('')
+        with col2:
+            st.write('Data Asli')
+            st.write(results['y_test'])
+        with col3:
+            st.write('Hasil Prediksi')
+            st.write(results['y_pred'])
+        col4.metric("Root Mean Squared Error (RMSE)", str('{:.2f}'.format(results['RMSE'])))
+        with col5:
+            st.write('')
+
+        st.success('Analisis 3 Fungsi Anggaran Utama dalam Memprediksi ' + target)
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.write('Hasil Prediksi')
-            st.write(results['y_test'])
+            st.write('')
         with col2:
-            st.write('Data Real')
-            st.write(results['y_pred'])
-        col3.metric("Mean Square Error (MSE)", str('{:.2f}'.format(results['MSE'])))
-
-        st.success('Seleksi Fitur')
-        col1, col2 = st.columns(2)
-        with col1:
-            st.write('Feature Importance')
-            st.write(results['importance_df'].style.applymap(util.is_feature_importance, subset=['importance']))
+            st.write('Tingkat Keutamaan Fungsi Anggaran')
+            st.write(results['importance_df'].style.applymap(util.is_feature_importance, subset=['Keutamaan']))
             #df.style.applymap(is_temp_valid, subset=['celsius_temperature'])
-        with col2:
-            st.write('Best Features')
+        with col3:
+            st.write('3 Fungsi Anggaran Utama')
             st.write(results['dfprov'].iloc[:, 1:])
+        with col4:
+            st.write('')
 
-        st.success('Hasil Prediksi dengan Best Features')
-        col1, col2, col3 = st.columns(3)
+        st.success('Hasil Prediksi ' + target + ' dengan 3 Fungsi Anggaran Utama')
+        col1, col2, col3, col4, col5 = st.columns(5)
         with col1:
-            st.write('Hasil Prediksi')
-            st.write(results['y_test Tahap 2'])
+            st.write('')
         with col2:
-            st.write('Data Real')
+            st.write('Data Asli')
+            st.write(results['y_test Tahap 2'])
+        with col3:
+            st.write('Hasil Prediksi')
             st.write(results['y_pred Tahap 2'])
-        col3.metric("Mean Square Error (MSE)", str('{:.2f}'.format(results['mse Tahap 2'])))
-
-        st.success('Simulasi Belanja Pemerintah Pusat Per Fungsi terhadadap Capaian ' + column[0])
-        with st.form("my_form"):
+        col4.metric("Root Mean Squared Error (RMSE)", str('{:.2f}'.format(results['rmse Tahap 2'])))
+        with col5:
+            st.write('')
+with tab3:
+    if 'results' in locals():
+        st.success('Simulasi Belanja Pemerintah Pusat Per Fungsi terhadap Capaian ' + target)
+        with st.form("form_1"):
             col1, col2, col3 = st.columns(3)
             with col1:
                 f1 = st.number_input('Anggaran ' + results['dfprov'].columns[1])
@@ -149,7 +160,7 @@ with tab2:
             with col3:
                 f3 = st.number_input('Anggaran ' + results['dfprov'].columns[3])
                 
-            submitted = st.form_submit_button("Submit")
+            submitted = st.form_submit_button("Hitung")
             if submitted:
                 predictionresult = (f1*results['regressor.coef_'][0][0] + f2*results['regressor.coef_'][0][1] + f3*results['regressor.coef_'][0][2])
-                st.metric('Prediksi Capaian ' +column[0]+':', str(predictionresult))
+                st.metric('Prediksi Capaian ' +target+':', str(predictionresult))
