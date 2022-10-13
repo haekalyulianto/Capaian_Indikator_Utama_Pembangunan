@@ -2,14 +2,10 @@ import json
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from execbox import execbox
 from sklearn import datasets, ensemble
-from sklearn.inspection import permutation_importance
 from sklearn.metrics import mean_squared_error
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, ElasticNet, SGDRegressor, BayesianRidge
 from sklearn.metrics import mean_absolute_error
-import mapping
 
 def read_map(df_mapping, provinsi):
     f = open('indonesia.geojson')  
@@ -51,7 +47,7 @@ def plot_map(df, indomap, tahun):
     )
 
     fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(autosize=False, width=1300, height=800)
+    fig.update_layout(autosize=False, width=1000, height=600)
     fig.data[0].colorbar.x=-0.05
 
     return fig
@@ -68,7 +64,7 @@ def prediction(dfprov):
     X_test = X[10:]
     y_test = y[10:]
 
-    params = {
+    params1 = {
         "n_estimators": 1000,
         "learning_rate": 0.01,
         "loss": "squared_error",
@@ -76,20 +72,22 @@ def prediction(dfprov):
 
     returns = {}
 
-    reg = ensemble.GradientBoostingRegressor(**params)
+    reg = ensemble.GradientBoostingRegressor(**params1)
     reg.fit(X_train, y_train)
     y_pred = reg.predict(X_test)
 
     mse = mean_squared_error(y_test, y_pred)
+    rmse = np.sqrt(mse)
 
     returns['MSE'] = mse
+    returns['RMSE'] = rmse
     returns['y_pred'] = y_pred
     returns['y_test'] = y_test
 
     feature_importance = reg.feature_importances_
-    importance_df = pd.DataFrame({'features': X_train.columns,
-                                'importance': feature_importance})
-    importance_df.sort_values(by='importance', ascending=False, inplace=True)
+    importance_df = pd.DataFrame({'Anggaran': X_train.columns,
+                                'Keutamaan': feature_importance})
+    importance_df.sort_values(by='Keutamaan', ascending=False, inplace=True)
     
     returns['importance_df'] = importance_df
 
@@ -109,6 +107,11 @@ def prediction(dfprov):
     y_train = y[:10]
     X_test = X[10:]
     y_test = y[10:]
+
+    # params2 = {
+    #     "learning_rate": 0.01,
+    #     "loss": "squared_error",
+    # }
 
     regressor = LinearRegression()
     regressor.fit(X_train, y_train)
