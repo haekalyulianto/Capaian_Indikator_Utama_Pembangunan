@@ -8,7 +8,7 @@ import mapping
 st.set_page_config(page_title="Peta Indonesia", layout="wide")
 st.title('Capaian Indikator Utama Pembangunan di Indonesia')
 
-tab1, tab2, tab3 = st.tabs(["Visualisasi Data", "Prediksi dan Seleksi Fitur", "Simulasi"])
+tab1, tab2, tab3 = st.tabs(["Visualisasi Data", "Prediksi Data", "Simulasi"])
 # Pemrosesan Data
 #df = util.read_and_preprocess_data('IPM')
 # =================================================================
@@ -50,8 +50,8 @@ with tab1:
     for i in provinsi:
         for j in column:
             exec('{}["{}"]={}.loc[{}:{},2010:2021].T'.format(i,j,j,countX,countY))
-        #countX+=1
-    countY+=1
+        countX+=1
+        countY+=1
 
     APBN = pd.read_csv('Peta APBN Data.csv', header=None)
 
@@ -91,7 +91,7 @@ with tab1:
         # Visualisasi Peta
         if(len(selected_points) > 0):
             idx = int(selected_points[0]['pointIndex'])
-
+            
             name_provinsi = df.iloc[idx]['provinsi']
             selected_provinsi = df['variabel'].iloc[idx]
 
@@ -99,12 +99,20 @@ with tab1:
             exec('results = util.prediction({})'.format(selected_provinsi))
     
     with col2:
+        st.warning('Provinsi Dipilih: ')
         if 'name_provinsi' in locals():
-            st.subheader('Provinsi Dipilih: ' + '\n' + name_provinsi)
+            st.write('\n' + name_provinsi)      
+            exec('st.write({}[[column[0]]].style.applymap(util.is_target, subset=[column[0]]))'.format(selected_provinsi))
     
 with tab2:
     if 'name_provinsi' in locals():
-        st.subheader('Capaian ' + target + ' pada Provinsi ' + name_provinsi)
+        inputcol1, inputcol2 = st.columns(2)
+        with inputcol1:
+            name_provinsi = st.selectbox('Provinsi', (df['provinsi']), index=idx, key=1)
+        with inputcol2:
+            target = st.selectbox('Indikator', ('Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka'), key = 2)
+        st.subheader('Prediksi ' + target + ' pada Provinsi ' + name_provinsi)
+    
     if 'results' in locals():
         st.success('Hasil Prediksi ' + target)
         #col1, col2, col3, col4 = st.columns(4)
@@ -121,7 +129,7 @@ with tab2:
         with col5:
             st.write('')
 
-        st.success('Analisis 3 Fungsi Anggaran Utama dalam Memprediksi ' + target)
+        st.success('Analisis Fungsi Anggaran Utama dalam Memprediksi ' + target)
         col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.write('')
@@ -135,32 +143,42 @@ with tab2:
         with col4:
             st.write('')
 
-        st.success('Hasil Prediksi ' + target + ' dengan 3 Fungsi Anggaran Utama')
-        col1, col2, col3, col4, col5 = st.columns(5)
-        with col1:
-            st.write('')
-        with col2:
-            st.write('Data Asli')
-            st.write(results['y_test Tahap 2'])
-        with col3:
-            st.write('Hasil Prediksi')
-            st.write(results['y_pred Tahap 2'])
-        col4.metric("Root Mean Squared Error (RMSE)", str('{:.2f}'.format(results['rmse Tahap 2'])))
-        with col5:
-            st.write('')
 with tab3:
     if 'results' in locals():
-        st.success('Simulasi Belanja Pemerintah Pusat Per Fungsi terhadap Capaian ' + target)
+        inputcol1, inputcol2 = st.columns(2)
+        with inputcol1:
+            name_provinsi = st.selectbox('Provinsi', (df['provinsi']), index=idx, key=3)
+        with inputcol2:
+            target = st.selectbox('Indikator', ('Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka'), key = 4)
+       
+        st.subheader('Simulasi Belanja Pemerintah Pusat Per Fungsi terhadap Capaian ' + target + ' pada Provinsi ' + name_provinsi)
+
+        st.success('Simulasi ' + target + ' yang Akan Dicapai Berdasarkan 3 Fungsi Anggaran Utama yang Dikeluarkan' )   
         with st.form("form_1"):
             col1, col2, col3 = st.columns(3)
             with col1:
-                f1 = st.number_input('Anggaran ' + results['dfprov'].columns[1])
+                f1 = st.number_input('Anggaran ' + results['dfprov'].columns[1] + ' (Dalam Milyar Rupiah)')
             with col2:
-                f2 = st.number_input('Anggaran ' + results['dfprov'].columns[2])
+                f2 = st.number_input('Anggaran ' + results['dfprov'].columns[2] + ' (Dalam Milyar Rupiah)')
             with col3:
-                f3 = st.number_input('Anggaran ' + results['dfprov'].columns[3])
+                f3 = st.number_input('Anggaran ' + results['dfprov'].columns[3] + ' (Dalam Milyar Rupiah)')
                 
             submitted = st.form_submit_button("Hitung")
             if submitted:
                 predictionresult = (f1*results['regressor.coef_'][0][0] + f2*results['regressor.coef_'][0][1] + f3*results['regressor.coef_'][0][2])
-                st.metric('Prediksi Capaian ' +target+':', str(predictionresult))
+                st.metric('Prediksi Capaian ' +target+':', str('{:.2f}'.format(predictionresult)))
+        
+        st.success('Simulasi Fungsi Anggaran Utama yang Perlu Dikeluarkan untuk Mencapai ' + target + ' yang Diinginkan')
+        with st.form("form_2"):
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.write('')
+            with col2:
+                f1 = st.number_input('Capaian ' + target + ' yang Diinginkan')
+            with col3:
+                st.write('')
+                
+            submitted = st.form_submit_button("Hitung")
+            if submitted:
+                predictionresult2 = f1*results['regressor.coef_ Tahap 3'][0][0]
+                st.metric('Prediksi Anggaran  ' + results['dfprov2'].columns[1] +' yang Dibutuhkan (Dalam Milyar Rupiah): ', str('{:.2f}'.format(predictionresult2)))
