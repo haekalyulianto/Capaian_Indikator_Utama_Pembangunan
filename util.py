@@ -68,6 +68,7 @@ def prediction(dfprov):
         "n_estimators": 1000,
         "learning_rate": 0.01,
         "loss": "squared_error",
+        "random_state": 0
     }
 
     returns = {}
