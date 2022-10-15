@@ -55,7 +55,7 @@ def plot_map(df, indomap, tahun):
 def prediction(dfprov):
     namakolom = dfprov.columns[0]
 
-    # TAHAP 1
+    # Tahap 1
     X = dfprov.iloc[:, 1:12]
     y = dfprov.iloc[:,0]
     
@@ -68,7 +68,7 @@ def prediction(dfprov):
         "n_estimators": 1000,
         "learning_rate": 0.01,
         "loss": "squared_error",
-        "random_state": 0
+        "random_state": 42
     }
 
     returns = {}
@@ -92,7 +92,7 @@ def prediction(dfprov):
     
     returns['importance_df'] = importance_df
 
-    #select top 3 feature
+    # Pilih 3 Fitur Utama
     feature=importance_df.iloc[:3,:1].T.values.tolist()
     flat_list = [item for sublist in feature for item in sublist]
     flat_list.append(namakolom)
@@ -100,7 +100,7 @@ def prediction(dfprov):
 
     returns['dfprov'] = dfprov
 
-    # TAHAP 2
+    # Tahap 2
     X = dfprov.iloc[:, 1:10]
     y = dfprov[[namakolom]]
 
@@ -112,7 +112,7 @@ def prediction(dfprov):
     regressor = LinearRegression()
     regressor.fit(X_train, y_train)
 
-    #persamaan
+    # Persamaan
     returns['regressor.intercept'] = regressor.intercept_
     returns['regressor.coef_'] = regressor.coef_
 
@@ -128,8 +128,8 @@ def prediction(dfprov):
     returns['mse Tahap 2'] = mse
     returns['rmse Tahap 2'] = rmse
 
-    # TAHAP 3
-    # select top 1 feature
+    # Tahap 3
+    # Pilih 1 Fitur Utama
     feature2=importance_df.iloc[:1,:1].T.values.tolist()
     flat_list2 = [item for sublist in feature2 for item in sublist]
     flat_list2.append(namakolom)
@@ -148,7 +148,7 @@ def prediction(dfprov):
     regressor = LinearRegression()
     regressor.fit(X_train, y_train)
 
-    #persamaan
+    # Persamaan
     returns['regressor.intercept Tahap 3'] = regressor.intercept_
     returns['regressor.coef_ Tahap 3'] = regressor.coef_
 
@@ -178,4 +178,4 @@ def is_feature_importance(temp):
 
 def is_target(value):
     if value > 6:
-        return 'background-color: lightgreen' #Ini kudu diubah sih biar menyesuaikan target per indikatornya wkwk
+        return 'background-color: lightgreen' # Ini kudu diubah sih biar menyesuaikan target per indikatornya wkwk
