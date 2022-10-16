@@ -4,8 +4,6 @@ import pandas as pd
 import plotly.graph_objects as go
 from sklearn import ensemble
 from sklearn.metrics import mean_squared_error
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error
 
 def read_map(df_mapping, provinsi):
     f = open('indonesia.geojson')  
@@ -38,9 +36,9 @@ def plot_map(df, indomap, tahun):
     fig = go.Figure(
         data=go.Choropleth(
             geojson=indomap,
-            locations=df["provinsi"],  # Spatial coordinates
+            locations=df["provinsi"],
             featureidkey="properties.state",
-            z=df[int(tahun)],  # Data to be color-coded
+            z=df[int(tahun)],
             colorscale="YlOrRd",
             colorbar_title="Rentang",
         )
@@ -64,16 +62,9 @@ def prediction(dfprov):
     X_test = X[10:]
     y_test = y[10:]
 
-    params1 = {
-        "n_estimators": 1000,
-        "learning_rate": 0.01,
-        "loss": "squared_error",
-        "random_state": 42
-    }
-
     returns = {}
 
-    reg = ensemble.GradientBoostingRegressor(**params1)
+    reg = ensemble.GradientBoostingRegressor(random_state=42)
     reg.fit(X_train, y_train)
     y_pred = reg.predict(X_test)
 
@@ -100,70 +91,6 @@ def prediction(dfprov):
 
     returns['dfprov'] = dfprov
 
-    # Tahap 2
-    X = dfprov.iloc[:, 1:10]
-    y = dfprov[[namakolom]]
-
-    X_train = X[:10]
-    y_train = y[:10]
-    X_test = X[10:]
-    y_test = y[10:]
-
-    regressor = LinearRegression()
-    regressor.fit(X_train, y_train)
-
-    # Persamaan
-    returns['regressor.intercept'] = regressor.intercept_
-    returns['regressor.coef_'] = regressor.coef_
-
-    y_pred = regressor.predict(X_test)
-    returns['y_pred Tahap 2'] = y_pred
-    returns['y_test Tahap 2'] = y_test
-
-    mae = mean_absolute_error(y_test, y_pred)
-    mse = mean_squared_error(y_test, y_pred)
-    rmse = np.sqrt(mse)
-
-    returns['mae Tahap 2'] = mae
-    returns['mse Tahap 2'] = mse
-    returns['rmse Tahap 2'] = rmse
-
-    # Tahap 3
-    # Pilih 1 Fitur Utama
-    feature2=importance_df.iloc[:1,:1].T.values.tolist()
-    flat_list2 = [item for sublist in feature2 for item in sublist]
-    flat_list2.append(namakolom)
-    dfprov = dfprov[dfprov.columns.intersection(flat_list2)]
-
-    returns['dfprov2'] = dfprov
-
-    X = dfprov.iloc[:, 1:10]
-    y = dfprov[[namakolom]]
-
-    X_train = X[:10]
-    y_train = y[:10]
-    X_test = X[10:]
-    y_test = y[10:]
-
-    regressor = LinearRegression()
-    regressor.fit(X_train, y_train)
-
-    # Persamaan
-    returns['regressor.intercept Tahap 3'] = regressor.intercept_
-    returns['regressor.coef_ Tahap 3'] = regressor.coef_
-
-    y_pred = regressor.predict(X_test)
-    returns['y_pred Tahap 3'] = y_pred
-    returns['y_test Tahap 3'] = y_test
-
-    mae = mean_absolute_error(y_test, y_pred)
-    mse = mean_squared_error(y_test, y_pred)
-    rmse = np.sqrt(mse)
-
-    returns['mae Tahap 3'] = mae
-    returns['mse Tahap 3'] = mse
-    returns['rmse Tahap 3'] = rmse
-
     return returns
 
 def is_feature_importance(temp):
@@ -178,4 +105,4 @@ def is_feature_importance(temp):
 
 def is_target(value):
     if value > 6:
-        return 'background-color: lightgreen' # Ini kudu diubah sih biar menyesuaikan target per indikatornya wkwk
+        return 'background-color: white' # Ini kudu diubah sih biar menyesuaikan target per indikatornya wkwk
