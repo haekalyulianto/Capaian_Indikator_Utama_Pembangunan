@@ -3,6 +3,8 @@ import streamlit as st
 from streamlit_plotly_events import plotly_events
 import util
 import mapping
+from sklearn import ensemble
+from sklearn.multioutput import MultiOutputRegressor
 
 # Konfigurasi Halaman
 st.set_page_config(page_title="Peta Indonesia", layout="wide")
@@ -45,7 +47,6 @@ with tab1:
     countX=0
     countY=0
 
-    #isi data target
     for i in provinsi:
         for j in column:
             exec('{}["{}"]={}.loc[{}:{},2010:2021].T'.format(i,j,j,countX,countY))
@@ -74,7 +75,6 @@ with tab1:
     for x in provinsi:
         exec('{}.index = {}.index.map(str)'.format(x, x))
         exec('{} = pd.concat([{}, {}APBN], axis=1, join="inner")'.format(x, x, x))
-    # =================================================================
 
     # Pemrosesan Peta
     st.success('Data ' + target + ' per Provinsi')
@@ -92,7 +92,6 @@ with tab1:
             
             name_provinsi = df.iloc[idx]['provinsi']
             selected_provinsi = df['variabel'].iloc[idx]
-            #exec('st.write({})'.format(selected_provinsi))
             exec('results = util.prediction({})'.format(selected_provinsi))
     
     with col2:
@@ -150,15 +149,19 @@ with tab3:
                 
             submitted = st.form_submit_button("Hitung")
             if submitted:
-                col1, col2, col3, = st.columns(3)
-                with col1:
-                    st.metric('Koefisien ' + results['dfprov'].columns[1] +':', str('{:.3f}'.format(results['regressor.coef_'][0][0])))
-                with col2:
-                    st.metric('Koefisien ' + results['dfprov'].columns[2] +':', str('{:.3f}'.format(results['regressor.coef_'][0][1])))
-                with col3:
-                    st.metric('Koefisien ' + results['dfprov'].columns[3] +':', str('{:.3f}'.format(results['regressor.coef_'][0][2])))
-                predictionresult = (f1*results['regressor.coef_'][0][0] + f2*results['regressor.coef_'][0][1] + f3*results['regressor.coef_'][0][2])
-                st.metric('Prediksi Capaian ' +target+':', str('{:.3f}'.format(predictionresult)))
+
+                X = results['dfprov'].iloc[:, 1:4]
+                y = results['dfprov'][[results['dfprov'].columns[0]]]
+
+                X_train = X[:12]
+                y_train = y[:12]
+                
+                regressor = ensemble.GradientBoostingRegressor(random_state=42)
+                regressor.fit(X_train, y_train)
+                
+                y_pred = regressor.predict([[f1, f2, f3]])
+
+                st.metric('Prediksi Capaian ' +target+':', str('{:.3f}'.format(y_pred[0])))
         
         st.success('Simulasi Fungsi Anggaran Utama yang Perlu Dikeluarkan untuk Mencapai ' + target + ' yang Diinginkan')
         with st.form("form_2"):
@@ -172,6 +175,24 @@ with tab3:
                 
             submitted = st.form_submit_button("Hitung")
             if submitted:
-                st.metric('Koefisien ' + results['dfprov2'].columns[1] +':', str('{:.3f}'.format(results['regressor.coef_ Tahap 3'][0][0])))
-                predictionresult2 = f1*results['regressor.coef_ Tahap 3'][0][0]
-                st.metric('Prediksi Anggaran  ' + results['dfprov2'].columns[1] +' yang Dibutuhkan (Dalam Milyar Rupiah): ', str('{:.3f}'.format(predictionresult2)))
+                
+                X = results['dfprov'].iloc[:, 1:4]
+                y = results['dfprov'][[results['dfprov'].columns[0]]]
+
+                st.write(X.columns[0])
+
+                y_train = X[:12]
+                X_train = y[:12]
+                
+                regressor = MultiOutputRegressor(ensemble.GradientBoostingRegressor(random_state=42))
+                regressor.fit(X_train, y_train)
+                
+                y_pred = regressor.predict([[f1]])
+
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric('Prediksi Anggaran  ' + X.columns[0] +' (Dalam Milyar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))))
+                with col2:
+                    st.metric('Prediksi Anggaran  ' + X.columns[1] +' (Dalam Milyar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,1:2]))))
+                with col3:
+                    st.metric('Prediksi Anggaran  ' + X.columns[2] +' (Dalam Milyar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,2:3]))))
