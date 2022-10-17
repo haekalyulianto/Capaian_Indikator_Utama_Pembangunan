@@ -98,7 +98,9 @@ with tab1:
         st.warning('Provinsi Dipilih: ')
         if 'name_provinsi' in locals():
             st.write('Provinsi '+ name_provinsi)      
-            exec('st.write({}[[column[0]]].style.applymap(util.is_target, subset=[column[0]]))'.format(selected_provinsi))
+            #exec('st.write({}[[column[0]]].style.applymap(util.is_target, subset=[column[0]]))'.format(selected_provinsi))
+            exec('st.write({}[[column[0]]].style.background_gradient(cmap="YlOrRd"))'.format(selected_provinsi))
+            
     
 with tab2:
     if 'name_provinsi' in locals():
