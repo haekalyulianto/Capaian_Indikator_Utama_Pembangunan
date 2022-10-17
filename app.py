@@ -187,8 +187,6 @@ with tab3:
                 X = results['dfprov'].iloc[:, 1:4]
                 y = results['dfprov'][[results['dfprov'].columns[0]]]
 
-                st.write(X.columns[0])
-
                 y_train = X[:12]
                 X_train = y[:12]
                 
