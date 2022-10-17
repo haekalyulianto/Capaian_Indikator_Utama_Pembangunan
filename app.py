@@ -23,22 +23,32 @@ with tab1:
         target = st.selectbox('Indikator', ('Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka'), key=0)
 
     filetarget = 'Indeks Pembangunan Manusia.xlsx'
+    sasaran = 'IPM.xlsx'
+    
     column = ['IPM']
 
     if (target == 'Tingkat Kemiskinan'):
         filetarget = 'persentasemiskin.xlsx'
+        sasaran = 'TK.xlsx'
         column = ['Kemiskinan']
     elif (target == 'Rasio Gini'):
         filetarget = 'giniratio.xlsx'
+        sasaran = 'GINI.xlsx'
         column = ['Gini']
     elif (target == 'Laju Pertumbuhan Ekonomi'):
         filetarget = 'Laju PDRB.xlsx'
+        sasaran = 'LPE.xlsx'
         column = ['LPE']
     elif (target == 'Tingkat Pengangguran Terbuka'):
         filetarget = 'pengangguran.xlsx'
+        sasaran = 'TPT.xlsx'
         column = ['TPT']
 
     exec('{} = pd.read_excel("{}")'.format(column[0], filetarget))
+
+    filesasaran = pd.read_excel(sasaran).sort_values(by='tahun').reset_index().drop('index', axis=1)
+    filesasaran.fillna("", inplace = True)
+
     provinsi=['ACEH','SUMATERA_UTARA','SUMATERA_BARAT','RIAU', 'JAMBI',	'SUMATERA_SELATAN',	'BENGKULU',	'LAMPUNG',	'BANGKA_BELITUNG',	'KEPRI',	'DKI_JAKARTA',	'JAWA_BARAT',	'JAWA_TENGAH',	'DI_YOGYAKARTA',	'JAWA_TIMUR',	'BANTEN',	'BALI',	'NTB',	'NTT',	'KALIMANTAN_BARAT',	'KALIMANTAN_TENGAH',	'KALIMANTAN_SELATAN',	'KALIMANTAN_TIMUR',	'KALIMANTAN_UTARA',	'SULAWESI_UTARA',	'SULAWESI_TENGAH',	'SULAWESI_SELATAN',	'SULAWESI_TENGGARA',	'GORONTALO',	'SULAWESI_BARAT',	'MALUKU',	'MALUKU_UTARA',	'PAPUA_BARAT',	'PAPUA']
 
     for x in provinsi:  
@@ -97,10 +107,18 @@ with tab1:
     with col2:
         st.warning('Provinsi Dipilih: ')
         if 'name_provinsi' in locals():
-            st.write('Provinsi '+ name_provinsi)      
+            st.write('Provinsi '+ name_provinsi)
+
+            exec('temp_df={}[[column[0]]].reset_index().drop("index", axis=1)'.format(selected_provinsi))
+            temp_df=pd.concat([temp_df, filesasaran], axis=1).set_index("tahun")  
+
+            st.write(temp_df[[column[0]]].style.applymap(util.is_target, data=temp_df, subset=[column[0]]))
             #exec('st.write({}[[column[0]]].style.applymap(util.is_target, subset=[column[0]]))'.format(selected_provinsi))
-            exec('st.write({}[[column[0]]].style.background_gradient(cmap="YlOrRd"))'.format(selected_provinsi))
-            
+
+            with st.expander("Keterangan"):
+                st.write('Merah: Masih jauh dari target dalam RKP (>5% deviasi dari nilai target)')
+                st.write('Kuning: Mendekati target dalam RKP (5% deviasi dari nilai target)')  
+                st.write('Hijau: Sudah memenuhi target dalam RKP (>= atau <=)')                            
     
 with tab2:
     if 'name_provinsi' in locals():

@@ -103,6 +103,37 @@ def is_feature_importance(temp):
     else:
         return 'background-color: red'
 
-def is_target(value):
-    if value > 6:
-        return 'background-color: white' # Ini kudu diubah sih biar menyesuaikan target per indikatornya wkwk
+def is_target(value, data):                 #masih bug --> if else condition kebacanya kacau
+  for index, row in data.iterrows():
+    deviasi=0
+    if row['batas_bawah'] != '' and row['batas_atas']=='':
+      print(row['batas_bawah'])
+      deviasi = row['batas_bawah'] * 5/100
+      if value > row['batas_bawah'] and value <= row['batas_bawah']+deviasi:
+        return 'background-color: yellow'
+      elif value > row['batas_bawah'] and value > row['batas_bawah']+deviasi:
+        return 'background-color: red'
+      elif value < row['batas_bawah'] and value >= row['batas_bawah']-deviasi:
+        return 'background-color: yellow'
+      elif value < row['batas_bawah'] and value < row['batas_bawah']-deviasi:
+        return 'background-color: red'
+      elif value == row['batas_bawah']:
+        return 'background-color: green'
+    elif row['batas_bawah']!='' and row['batas_atas']!='':
+      if value >= row['batas_bawah']:
+        deviasi = row['batas_atas'] * 5/100
+        if value <= row['batas_atas']:
+          return 'background-color: green'
+        elif value > row['batas_atas'] and value <= row['batas_atas']+deviasi:
+          return 'background-color: yellow'
+        elif value > row['batas_atas'] and value > row['batas_atas']+deviasi:
+          return 'background-color: red'
+      elif value <= row['batas_bawah']:
+        deviasi = row['batas_bawah'] * 5/100
+        if value >= row['batas_bawah']-deviasi:
+          return 'background-color: yellow'
+        elif value < row['batas_bawah']+deviasi:
+          print(row['batas_bawah'],row['batas_bawah']-deviasi)
+          return 'background-color: red'
+    else:
+      return 'background-color: white'
