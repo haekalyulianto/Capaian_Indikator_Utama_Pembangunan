@@ -2,5 +2,5 @@
 
 # Authors
 Haekal Rizky Yulianto  
-Kurniandha Sukma Yunastrian
+Kurniandha Sukma Yunastrian  
 Safira Vanillia Putri
