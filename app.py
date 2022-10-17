@@ -140,14 +140,20 @@ with tab3:
         st.subheader('Simulasi Belanja Pemerintah Pusat Per Fungsi terhadap Capaian ' + target + ' pada Provinsi ' + name_provinsi)
 
         st.success('Simulasi ' + target + ' yang Akan Dicapai Berdasarkan 3 Fungsi Anggaran Utama yang Dikeluarkan' )   
+
+        bpp2022 = pd.read_excel('BPP_2022.xlsx')
+        f1val = bpp2022.loc[bpp2022['Tahun'] == results['dfprov'].columns[1]]['2022'].iloc[0]
+        f2val = bpp2022.loc[bpp2022['Tahun'] == results['dfprov'].columns[2]]['2022'].iloc[0]
+        f3val = bpp2022.loc[bpp2022['Tahun'] == results['dfprov'].columns[3]]['2022'].iloc[0]
+
         with st.form("form_1"):
             col1, col2, col3 = st.columns(3)
             with col1:
-                f1 = st.number_input('Anggaran ' + results['dfprov'].columns[1] + ' (Dalam Milyar Rupiah)')
+                f1 = st.number_input('Anggaran ' + results['dfprov'].columns[1] + ' (Dalam Milyar Rupiah)', value=f1val)
             with col2:
-                f2 = st.number_input('Anggaran ' + results['dfprov'].columns[2] + ' (Dalam Milyar Rupiah)')
+                f2 = st.number_input('Anggaran ' + results['dfprov'].columns[2] + ' (Dalam Milyar Rupiah)', value=f2val)
             with col3:
-                f3 = st.number_input('Anggaran ' + results['dfprov'].columns[3] + ' (Dalam Milyar Rupiah)')
+                f3 = st.number_input('Anggaran ' + results['dfprov'].columns[3] + ' (Dalam Milyar Rupiah)', value=f3val)
                 
             submitted = st.form_submit_button("Hitung")
             if submitted:
@@ -171,7 +177,7 @@ with tab3:
             with col1:
                 st.write('')
             with col2:
-                f1 = st.number_input('Capaian ' + target + ' yang Diinginkan')
+                f1 = st.number_input('Capaian ' + target + ' yang Diinginkan', value=74.01)
             with col3:
                 st.write('')
                 
