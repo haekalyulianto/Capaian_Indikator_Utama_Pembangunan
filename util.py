@@ -46,7 +46,7 @@ def plot_map(df, indomap, tahun):
     )
 
     fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(autosize=False, width=1000, height=600)
+    fig.update_layout(autosize=False, width=1000, height=635)
     fig.data[0].colorbar.x=-0.05
 
     return fig
@@ -95,51 +95,16 @@ def prediction(dfprov):
     return returns
 
 def is_feature_importance(temp):
-    if temp > 0.5:
+    if temp >= 0.5:
         return 'background-color: lightgreen'
-    elif temp > 0.2 and temp < 0.5:
+    elif temp >= 0.2 and temp < 0.5:
         return 'background-color: yellow'
-    elif temp > 0.1 and temp < 0.2:
+    elif temp >= 0.1 and temp < 0.2:
         return 'background-color: orange'
     else:
         return 'background-color: red'
 
-def coba(value, data):                 #masih bug --> if else condition kebacanya kacau
-  for index, row in data.iterrows():
-    deviasi=0
-    if row['batas_bawah'] != '' and row['batas_atas']=='':
-      print(row['batas_bawah'])
-      deviasi = row['batas_bawah'] * 5/100
-      if value > row['batas_bawah'] and value <= row['batas_bawah']+deviasi:
-        return 'background-color: yellow'
-      elif value > row['batas_bawah'] and value > row['batas_bawah']+deviasi:
-        return 'background-color: red'
-      elif value < row['batas_bawah'] and value >= row['batas_bawah']-deviasi:
-        return 'background-color: yellow'
-      elif value < row['batas_bawah'] and value < row['batas_bawah']-deviasi:
-        return 'background-color: red'
-      elif value == row['batas_bawah']:
-        return 'background-color: green'
-    elif row['batas_bawah']!='' and row['batas_atas']!='':
-      if value >= row['batas_bawah']:
-        deviasi = row['batas_atas'] * 5/100
-        if value <= row['batas_atas']:
-          return 'background-color: green'
-        elif value > row['batas_atas'] and value <= row['batas_atas']+deviasi:
-          return 'background-color: yellow'
-        elif value > row['batas_atas'] and value > row['batas_atas']+deviasi:
-          return 'background-color: red'
-      elif value <= row['batas_bawah']:
-        deviasi = row['batas_bawah'] * 5/100
-        if value >= row['batas_bawah']-deviasi:
-          return 'background-color: yellow'
-        elif value < row['batas_bawah']+deviasi:
-          print(row['batas_bawah'],row['batas_bawah']-deviasi)
-          return 'background-color: red'
-    else:
-      return 'background-color: white'
-
-def is_target(temp_df, col) :                   #solusi 2 pake ini, tapi ga apply warna :') 
+def is_target(temp_df, col) :                
   for index, row in temp_df.iterrows():
     if row['batas_bawah'] != '' and row['batas_atas']=='':
       deviasi = row['batas_bawah'] * 5/100
