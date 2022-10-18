@@ -1,230 +1,172 @@
+import json
+import numpy as np
 import pandas as pd
-import streamlit as st
-from streamlit_plotly_events import plotly_events
-import util
-import mapping
+import plotly.graph_objects as go
 from sklearn import ensemble
-from sklearn.multioutput import MultiOutputRegressor
+from sklearn.metrics import mean_squared_error
+import streamlit as st
 
-# Konfigurasi Halaman
-st.set_page_config(page_title="Peta Indonesia", layout="wide")
-st.title('Capaian Indikator Utama Pembangunan di Indonesia')
+def read_map(df_mapping, provinsi):
+    f = open('indonesia.geojson')  
+    indomap = json.load(f)
+    f.close()
 
-tab1, tab2, tab3 = st.tabs(["1. Visualisasi Data", "2. Prediksi Data", "3. Simulasi"])
+    provtemp = provinsi
+    provtemp.append('INDONESIA')
 
-# Pemrosesan Data
-with tab1:
-    inputcol1, inputcol2 = st.columns(2)
+    df_mapping['variabel'] = provtemp
 
-    with inputcol1:
-        tahun = st.selectbox('Tahun', ([str(x) for x in range(2021, 2009, -1)]))
-
-    with inputcol2:
-        target = st.selectbox('Indikator', ('Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka'), key=0)
-
-    filetarget = 'Indeks Pembangunan Manusia.xlsx'
-    sasaran = 'IPM.xlsx'
+    df = pd.DataFrame(
+        {"Provinsi": pd.json_normalize(indomap["features"])["properties.state"]}
+    ).assign(Columnnext=lambda d: d["Provinsi"].str.len())
     
-    column = ['IPM']
-    flag='IPM'
+    mappingprovinsi = pd.read_csv('mappingprovinsi.csv')
 
-    if (target == 'Tingkat Kemiskinan'):
-        filetarget = 'persentasemiskin.xlsx'
-        sasaran = 'TK.xlsx'
-        column = ['Kemiskinan']
-        flag='Kemiskinan'
-    elif (target == 'Rasio Gini'):
-        filetarget = 'giniratio.xlsx'
-        sasaran = 'GINI.xlsx'
-        column = ['Gini']
-        flag='Gini'
-    elif (target == 'Laju Pertumbuhan Ekonomi'):
-        filetarget = 'Laju PDRB.xlsx'
-        sasaran = 'LPE.xlsx'
-        column = ['LPE']
-        flag='LPE'
-    elif (target == 'Tingkat Pengangguran Terbuka'):
-        filetarget = 'pengangguran.xlsx'
-        sasaran = 'TPT.xlsx'
-        column = ['TPT']
-        flag='TPT'
+    dfnew = pd.DataFrame()
 
-    exec('{} = pd.read_excel("{}")'.format(column[0], filetarget))
+    for i in mappingprovinsi['mappingtarget']:
+        df_mapping_temp = df_mapping.iloc[i]
+        dfnew = dfnew.append(df_mapping_temp)
 
-    filesasaran = pd.read_excel(sasaran).sort_values(by='tahun').reset_index().drop('index', axis=1)
-    filesasaran.fillna("", inplace = True)
+    dfnew = dfnew.reset_index(drop=True)
+    dfnew = pd.concat([dfnew, mappingprovinsi['provinsi']], axis=1, join="inner")
 
-    provinsi=['ACEH','SUMATERA_UTARA','SUMATERA_BARAT','RIAU', 'JAMBI',	'SUMATERA_SELATAN',	'BENGKULU',	'LAMPUNG',	'BANGKA_BELITUNG',	'KEPRI',	'DKI_JAKARTA',	'JAWA_BARAT',	'JAWA_TENGAH',	'DI_YOGYAKARTA',	'JAWA_TIMUR',	'BANTEN',	'BALI',	'NTB',	'NTT',	'KALIMANTAN_BARAT',	'KALIMANTAN_TENGAH',	'KALIMANTAN_SELATAN',	'KALIMANTAN_TIMUR',	'KALIMANTAN_UTARA',	'SULAWESI_UTARA',	'SULAWESI_TENGAH',	'SULAWESI_SELATAN',	'SULAWESI_TENGGARA',	'GORONTALO',	'SULAWESI_BARAT',	'MALUKU',	'MALUKU_UTARA',	'PAPUA_BARAT',	'PAPUA']
+    return dfnew, indomap
 
-    for x in provinsi:  
-        exec('{} = pd.DataFrame(columns=column)'.format(x))
+def plot_map(df, indomap, tahun):
+    fig = go.Figure(
+        data=go.Choropleth(
+            geojson=indomap,
+            locations=df["provinsi"],
+            featureidkey="properties.state",
+            z=df[int(tahun)],
+            colorscale="YlOrRd",
+            colorbar_title="Rentang",
+        )
+    )
 
-    countX=0
-    countY=0
+    fig.update_geos(fitbounds="locations", visible=False)
+    fig.update_layout(autosize=False, width=1000, height=600)
+    fig.data[0].colorbar.x=-0.05
 
-    for i in provinsi:
-        for j in column:
-            exec('{}["{}"]={}.loc[{}:{},2010:2021].T'.format(i,j,j,countX,countY))
-        countX+=1
-        countY+=1
+    return fig
 
-    APBN = pd.read_csv('Peta APBN Data.csv', header=None)
+def prediction(dfprov):
+    namakolom = dfprov.columns[0]
 
-    APBN[0][0] = 'Tahun'
-    APBN.columns = APBN.iloc[0]
-    APBN = APBN.iloc[1:]
-    APBN = APBN.astype({"Tahun": int})
-    APBN = APBN.astype({"Tahun": str})
-    APBN = APBN.set_index('Tahun', drop=True)
-
-    mappingprovinsiAPBN = mapping.mappingprovinsiAPBN
-
-    # Pisah - Pisah --> 11 fitur APBN Per Fungsi
-    for x in mappingprovinsiAPBN.keys():
-        firstcol = (x-1)*11 # Jumlah parameter
-        lastcol = x*11 
-        exec('{} = APBN.iloc[:, {}:{}]'.format(mappingprovinsiAPBN[x], firstcol, lastcol))
-        exec('for col in {}.columns: {}[col] = {}[col].astype(int)'.format(mappingprovinsiAPBN[x],mappingprovinsiAPBN[x],mappingprovinsiAPBN[x]))
-
-    # Join Join --> Kolom target dengan 11 fitur APBN Per Fungsi
-    for x in provinsi:
-        exec('{}.index = {}.index.map(str)'.format(x, x))
-        exec('{} = pd.concat([{}, {}APBN], axis=1, join="inner")'.format(x, x, x))
-
-    # Pemrosesan Peta
-    st.success('Data ' + target + ' per Provinsi')
-    exec('df_mapping = {}'.format(column[0]))
-    df, indomap = util.read_map(df_mapping, provinsi)
-   
-    col1, col2 = st.columns((4, 1))
-    with col1:
-        peta = util.plot_map(df, indomap, tahun)
-        selected_points = plotly_events(peta)
-
-        # Visualisasi Peta
-        if(len(selected_points) > 0):
-            idx = int(selected_points[0]['pointIndex'])
-            
-            name_provinsi = df.iloc[idx]['provinsi']
-            selected_provinsi = df['variabel'].iloc[idx]
-            exec('results = util.prediction({})'.format(selected_provinsi))
+    # Tahap 1
+    X = dfprov.iloc[:, 1:12]
+    y = dfprov.iloc[:,0]
     
-    with col2:
-        st.warning('Provinsi Dipilih: ')
-        if 'name_provinsi' in locals():
-            st.write('Provinsi '+ name_provinsi)
+    X_train = X[:10]
+    y_train = y[:10]
+    X_test = X[10:]
+    y_test = y[10:]
 
-            exec('temp_df={}[[column[0]]].reset_index().drop("index", axis=1)'.format(selected_provinsi))
-            temp_df=pd.concat([temp_df, filesasaran], axis=1)
+    returns = {}
 
-            util.is_target(temp_df, flag)
+    reg = ensemble.GradientBoostingRegressor(random_state=42)
+    reg.fit(X_train, y_train)
+    y_pred = reg.predict(X_test)
 
-            #temp_df=temp_df.set_index("tahun")
-            #st.write(temp_df[[column[0]]].style.applymap(util.coba, data=temp_df, subset=[column[0]]))
+    mse = mean_squared_error(y_test, y_pred)
+    rmse = np.sqrt(mse)
 
-            with st.expander("Keterangan"):
-                st.write('🟥 Masih jauh dari target dalam RKP (>5% deviasi dari nilai target)')
-                st.write('🟨 Mendekati target dalam RKP (5% deviasi dari nilai target)')  
-                st.write('🟩 Sudah memenuhi target dalam RKP (>= atau <=)')    
-                st.write('⬜ Target belum tersedia dalam RKP pada tahun tersebut')                        
+    returns['MSE'] = mse
+    returns['RMSE'] = rmse
+    returns['y_pred'] = y_pred
+    returns['y_test'] = y_test
+
+    feature_importance = reg.feature_importances_
+    importance_df = pd.DataFrame({'Fungsi Anggaran': X_train.columns,
+                                'Keutamaan': feature_importance})
+    importance_df.sort_values(by='Keutamaan', ascending=False, inplace=True)
     
-with tab2:
-    if 'name_provinsi' in locals():
-        st.subheader('Prediksi ' + target + ' pada Provinsi ' + name_provinsi)
-    
-    if 'results' in locals():
-        st.success('Hasil Prediksi ' + target)
-        col1, col2, col3, col4, col5 = st.columns(5)
-        with col1:
-            st.write('')
-        with col2:
-            st.write('Data Asli')
-            st.write(results['y_test'])
-        with col3:
-            st.write('Hasil Prediksi')
-            st.write(results['y_pred'])
-        col4.metric("Root Mean Squared Error (RMSE)", str('{:.3f}'.format(results['RMSE'])))
-        with col5:
-            st.write('')
+    returns['importance_df'] = importance_df
 
-        st.success('Analisis Fungsi Anggaran Utama dalam Memprediksi ' + target)
-        
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.write('')
-        with col2:
-            st.write('Tingkat Keutamaan Fungsi Anggaran')
-            st.write(results['importance_df'].style.applymap(util.is_feature_importance, subset=['Keutamaan']))
-        with col3:
-            st.write('3 Fungsi Anggaran Utama')
-            st.write(results['dfprov'].iloc[:, 1:])
-        with col4:
-            st.write('')
+    # Pilih 3 Fitur Utama
+    feature=importance_df.iloc[:3,:1].T.values.tolist()
+    flat_list = [item for sublist in feature for item in sublist]
+    flat_list.append(namakolom)
+    dfprov = dfprov[dfprov.columns.intersection(flat_list)]
 
-with tab3:
-    if 'results' in locals():
-        st.subheader('Simulasi Belanja Pemerintah Pusat Per Fungsi terhadap Capaian ' + target + ' pada Provinsi ' + name_provinsi)
+    returns['dfprov'] = dfprov
 
-        st.success('Simulasi ' + target + ' yang Akan Dicapai Berdasarkan 3 Fungsi Anggaran Utama yang Dikeluarkan' )   
+    return returns
 
-        bpp2022 = pd.read_excel('BPP_2022.xlsx')
-        f1val = bpp2022.loc[bpp2022['Tahun'] == results['dfprov'].columns[1]]['2022'].iloc[0]
-        f2val = bpp2022.loc[bpp2022['Tahun'] == results['dfprov'].columns[2]]['2022'].iloc[0]
-        f3val = bpp2022.loc[bpp2022['Tahun'] == results['dfprov'].columns[3]]['2022'].iloc[0]
+def is_feature_importance(temp):
+    if temp > 0.5:
+        return 'background-color: lightgreen'
+    elif temp > 0.2 and temp < 0.5:
+        return 'background-color: yellow'
+    elif temp > 0.1 and temp < 0.2:
+        return 'background-color: orange'
+    else:
+        return 'background-color: red'
 
-        with st.form("form_1"):
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                f1 = st.number_input('Anggaran ' + results['dfprov'].columns[1] + ' (Dalam Milyar Rupiah)', value=f1val)
-            with col2:
-                f2 = st.number_input('Anggaran ' + results['dfprov'].columns[2] + ' (Dalam Milyar Rupiah)', value=f2val)
-            with col3:
-                f3 = st.number_input('Anggaran ' + results['dfprov'].columns[3] + ' (Dalam Milyar Rupiah)', value=f3val)
-                
-            submitted = st.form_submit_button("Hitung")
-            if submitted:
+def coba(value, data):                 #masih bug --> if else condition kebacanya kacau
+  for index, row in data.iterrows():
+    deviasi=0
+    if row['batas_bawah'] != '' and row['batas_atas']=='':
+      print(row['batas_bawah'])
+      deviasi = row['batas_bawah'] * 5/100
+      if value > row['batas_bawah'] and value <= row['batas_bawah']+deviasi:
+        return 'background-color: yellow'
+      elif value > row['batas_bawah'] and value > row['batas_bawah']+deviasi:
+        return 'background-color: red'
+      elif value < row['batas_bawah'] and value >= row['batas_bawah']-deviasi:
+        return 'background-color: yellow'
+      elif value < row['batas_bawah'] and value < row['batas_bawah']-deviasi:
+        return 'background-color: red'
+      elif value == row['batas_bawah']:
+        return 'background-color: green'
+    elif row['batas_bawah']!='' and row['batas_atas']!='':
+      if value >= row['batas_bawah']:
+        deviasi = row['batas_atas'] * 5/100
+        if value <= row['batas_atas']:
+          return 'background-color: green'
+        elif value > row['batas_atas'] and value <= row['batas_atas']+deviasi:
+          return 'background-color: yellow'
+        elif value > row['batas_atas'] and value > row['batas_atas']+deviasi:
+          return 'background-color: red'
+      elif value <= row['batas_bawah']:
+        deviasi = row['batas_bawah'] * 5/100
+        if value >= row['batas_bawah']-deviasi:
+          return 'background-color: yellow'
+        elif value < row['batas_bawah']+deviasi:
+          print(row['batas_bawah'],row['batas_bawah']-deviasi)
+          return 'background-color: red'
+    else:
+      return 'background-color: white'
 
-                X = results['dfprov'].iloc[:, 1:4]
-                y = results['dfprov'][[results['dfprov'].columns[0]]]
-
-                X_train = X[:12]
-                y_train = y[:12]
-                
-                regressor = ensemble.GradientBoostingRegressor(random_state=42)
-                regressor.fit(X_train, y_train)
-                
-                y_pred = regressor.predict([[f1, f2, f3]])
-
-                st.metric('Prediksi Capaian ' +target+':', str('{:.3f}'.format(y_pred[0])))
-        
-        st.success('Simulasi Fungsi Anggaran Utama yang Perlu Dikeluarkan untuk Mencapai ' + target + ' yang Diinginkan')
-        with st.form("form_2"):
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.write('')
-            with col2:
-                f1 = st.number_input('Capaian ' + target + ' yang Diinginkan', value=74.01)
-            with col3:
-                st.write('')
-                
-            submitted = st.form_submit_button("Hitung")
-            if submitted:
-                
-                X = results['dfprov'].iloc[:, 1:4]
-                y = results['dfprov'][[results['dfprov'].columns[0]]]
-
-                y_train = X[:12]
-                X_train = y[:12]
-                
-                regressor = MultiOutputRegressor(ensemble.GradientBoostingRegressor(random_state=42))
-                regressor.fit(X_train, y_train)
-                
-                y_pred = regressor.predict([[f1]])
-
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.metric('Prediksi Anggaran  ' + X.columns[0] +' (Dalam Milyar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))))
-                with col2:
-                    st.metric('Prediksi Anggaran  ' + X.columns[1] +' (Dalam Milyar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,1:2]))))
-                with col3:
-                    st.metric('Prediksi Anggaran  ' + X.columns[2] +' (Dalam Milyar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,2:3]))))
+def is_target(temp_df, col) :                   #solusi 2 pake ini, tapi ga apply warna :') 
+  for index, row in temp_df.iterrows():
+    if row['batas_bawah'] != '' and row['batas_atas']=='':
+      deviasi = row['batas_bawah'] * 5/100
+      if row[col] > row['batas_bawah'] and row[col] <= row['batas_bawah']+deviasi:
+        st.write( '🟨',row['tahun'], ': ',row[col])
+      elif row[col] > row['batas_bawah'] and row[col] > row['batas_bawah']+deviasi:
+        st.write( '🟥',row['tahun'], ': ',row[col])
+      elif row[col] < row['batas_bawah'] and row[col] >= row['batas_bawah']-deviasi:
+        st.write( '🟨',row['tahun'], ': ',row[col])
+      elif row[col] < row['batas_bawah'] and row[col] < row['batas_bawah']-deviasi:
+        st.write( '🟥', row['tahun'], ': ',row[col])
+      elif row[col] == row['batas_bawah']:
+        st.write( '🟩',row['tahun'], ': ',row[col])
+    elif row['batas_bawah']!='' and row['batas_atas']!='':
+      if row[col] >= row['batas_bawah']:
+        deviasi = row['batas_atas'] * 5/100
+        if row[col] <= row['batas_atas']:
+          st.write( '🟩',row['tahun'], ': ',row[col])
+        elif row[col] > row['batas_atas'] and row[col] <= row['batas_atas']+deviasi:
+          st.write( '🟨',row['tahun'], ': ',row[col])
+        elif row[col] > row['batas_atas'] and row[col] > row['batas_atas']+deviasi:
+          st.write( '🟥',row['tahun'], ': ',row[col])
+      elif row[col] <= row['batas_bawah']:
+        deviasi = row['batas_bawah'] * 5/100
+        if row[col] >= row['batas_bawah']-deviasi:
+          st.write( '🟨',row['tahun'], ': ',row[col])
+        elif row[col] < row['batas_bawah']+deviasi:
+          st.write( '🟥',row['tahun'], ': ',row[col])
+    else:
+      st.write( '⬜', row['tahun'], ': ',row[col])
