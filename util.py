@@ -111,45 +111,45 @@ def is_target(temp_df, col) :
     if (col == 'IPM' or col == 'LPE'):
       if row['batas_bawah'] != '' and row['batas_atas']=='': 
         if row[col] >= row['batas_bawah']:
-          st.write( '🟩',row['tahun'], ': ',row[col])
+          st.write( '🟩',int(row['tahun']), ': ',row[col])
         elif row[col] < row['batas_bawah'] and row[col] >= row['batas_bawah']-deviasi:
-          st.write( '🟨',row['tahun'], ': ',row[col])
+          st.write( '🟨',int(row['tahun']), ': ',row[col])
         elif row[col] < row['batas_bawah']-deviasi:
-          st.write( '🟥', row['tahun'], ': ',row[col])
+          st.write( '🟥', int(row['tahun']), ': ',row[col])
       elif row['batas_bawah']!='' and row['batas_atas']!='':
         if row[col] >= row['batas_bawah']:
-          st.write( '🟩',row['tahun'], ': ',row[col])
+          st.write( '🟩',int(row['tahun']), ': ',row[col])
         else:
           if row[col] >= row['batas_bawah']-deviasi:
-            st.write( '🟨',row['tahun'], ': ',row[col])
+            st.write( '🟨',int(row['tahun']), ': ',row[col])
           elif row[col] < row['batas_bawah']-deviasi:
-            st.write( '🟥',row['tahun'], ': ',row[col])
+            st.write( '🟥',int(row['tahun']), ': ',row[col])
       else:
-        st.write( '⬜', row['tahun'], ': ',row[col])
+        st.write( '⬜', int(row['tahun']), ': ',row[col])
     else:
       if row['batas_bawah'] != '' and row['batas_atas']=='': 
         if row[col] > row['batas_bawah'] and row[col] <= row['batas_bawah']+deviasi:
-          st.write( '🟨',row['tahun'], ': ',row[col])
+          st.write( '🟨',int(row['tahun']), ': ',row[col])
         elif row[col] > row['batas_bawah'] and row[col] > row['batas_bawah']+deviasi:
-          st.write( '🟥',row['tahun'], ': ',row[col])
+          st.write( '🟥',int(row['tahun']), ': ',row[col])
         elif row[col] < row['batas_bawah'] and row[col] >= row['batas_bawah']-deviasi:
-          st.write( '🟨',row['tahun'], ': ',row[col])
+          st.write( '🟨',int(row['tahun']), ': ',row[col])
         elif row[col] < row['batas_bawah'] and row[col] < row['batas_bawah']-deviasi:
-          st.write( '🟥', row['tahun'], ': ',row[col])
+          st.write( '🟥', int(row['tahun']), ': ',row[col])
         elif row[col] == row['batas_bawah']:
-          st.write( '🟩',row['tahun'], ': ',row[col])
+          st.write( '🟩',int(row['tahun']), ': ',row[col])
       elif row['batas_bawah']!='' and row['batas_atas']!='':
         if row[col] >= row['batas_bawah']:
           if row[col] <= row['batas_atas']:
-            st.write( '🟩',row['tahun'], ': ',row[col])
+            st.write( '🟩',int(row['tahun']), ': ',row[col])
           elif row[col] > row['batas_atas'] and row[col] <= row['batas_atas']+deviasi:
-            st.write( '🟨',row['tahun'], ': ',row[col])
+            st.write( '🟨',int(row['tahun']), ': ',row[col])
           elif row[col] > row['batas_atas'] and row[col] > row['batas_atas']+deviasi:
-            st.write( '🟥',row['tahun'], ': ',row[col])
+            st.write( '🟥',int(row['tahun']), ': ',row[col])
         elif row[col] <= row['batas_bawah']:
           if row[col] >= row['batas_bawah']-deviasi:
-            st.write( '🟨',row['tahun'], ': ',row[col])
+            st.write( '🟨',int(row['tahun']), ': ',row[col])
           elif row[col] < row['batas_bawah']+deviasi:
-            st.write( '🟥',row['tahun'], ': ',row[col])
+            st.write( '🟥',int(row['tahun']), ': ',row[col])
       else:
-        st.write( '⬜', row['tahun'], ': ',row[col])
+        st.write( '⬜', int(row['tahun']), ': ',row[col])
