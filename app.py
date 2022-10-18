@@ -98,6 +98,7 @@ with tab1:
    
     col1, col2 = st.columns((4, 1))
     with col1:
+        do_refresh = st.button('Refresh')
         peta = util.plot_map(df, indomap, tahun)
         selected_points = plotly_events(peta)
 
@@ -110,7 +111,7 @@ with tab1:
             exec('results = util.prediction({})'.format(selected_provinsi))
     
     with col2:
-        st.warning('Provinsi Dipilih: ')
+        st.warning('Silakan Pilih Provinsi pada Peta')
         if 'name_provinsi' in locals():
             st.write(target + ' di Provinsi '+ name_provinsi)
 
