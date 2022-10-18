@@ -26,23 +26,28 @@ with tab1:
     sasaran = 'IPM.xlsx'
     
     column = ['IPM']
+    flag='IPM'
 
     if (target == 'Tingkat Kemiskinan'):
         filetarget = 'persentasemiskin.xlsx'
         sasaran = 'TK.xlsx'
         column = ['Kemiskinan']
+        flag='Kemiskinan'
     elif (target == 'Rasio Gini'):
         filetarget = 'giniratio.xlsx'
         sasaran = 'GINI.xlsx'
         column = ['Gini']
+        flag='Gini'
     elif (target == 'Laju Pertumbuhan Ekonomi'):
         filetarget = 'Laju PDRB.xlsx'
         sasaran = 'LPE.xlsx'
         column = ['LPE']
+        flag='LPE'
     elif (target == 'Tingkat Pengangguran Terbuka'):
         filetarget = 'pengangguran.xlsx'
         sasaran = 'TPT.xlsx'
         column = ['TPT']
+        flag='TPT'
 
     exec('{} = pd.read_excel("{}")'.format(column[0], filetarget))
 
@@ -110,10 +115,12 @@ with tab1:
             st.write('Provinsi '+ name_provinsi)
 
             exec('temp_df={}[[column[0]]].reset_index().drop("index", axis=1)'.format(selected_provinsi))
-            temp_df=pd.concat([temp_df, filesasaran], axis=1).set_index("tahun")  
+            temp_df=pd.concat([temp_df, filesasaran], axis=1)
 
-            st.write(temp_df[[column[0]]].style.applymap(util.is_target, data=temp_df, subset=[column[0]]))
-            #exec('st.write({}[[column[0]]].style.applymap(util.is_target, subset=[column[0]]))'.format(selected_provinsi))
+            util.is_target(temp_df, flag)
+
+            #temp_df=temp_df.set_index("tahun")
+            #st.write(temp_df[[column[0]]].style.applymap(util.coba, data=temp_df, subset=[column[0]]))
 
             with st.expander("Keterangan"):
                 st.write('Merah: Masih jauh dari target dalam RKP (>5% deviasi dari nilai target)')
