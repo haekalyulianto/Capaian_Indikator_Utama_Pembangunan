@@ -123,9 +123,9 @@ with tab1:
             #st.write(temp_df[[column[0]]].style.applymap(util.coba, data=temp_df, subset=[column[0]]))
 
             with st.expander("Keterangan"):
-                st.write('Merah: Masih jauh dari target dalam RKP (>5% deviasi dari nilai target)')
-                st.write('Kuning: Mendekati target dalam RKP (5% deviasi dari nilai target)')  
-                st.write('Hijau: Sudah memenuhi target dalam RKP (>= atau <=)')                            
+                st.write('🟥 Masih jauh dari target dalam RKP (>5% deviasi dari nilai target)')
+                st.write('🟨 Mendekati target dalam RKP (5% deviasi dari nilai target)')  
+                st.write('🟩 Sudah memenuhi target dalam RKP (>= atau <=)')                            
     
 with tab2:
     if 'name_provinsi' in locals():
