@@ -112,22 +112,24 @@ with tab1:
     with col2:
         st.warning('Provinsi Dipilih: ')
         if 'name_provinsi' in locals():
-            st.write('Provinsi '+ name_provinsi)
+            st.write(target + ' di Provinsi '+ name_provinsi)
 
             exec('temp_df={}[[column[0]]].reset_index().drop("index", axis=1)'.format(selected_provinsi))
             temp_df=pd.concat([temp_df, filesasaran], axis=1)
 
             util.is_target(temp_df, flag)
-
-            #temp_df=temp_df.set_index("tahun")
-            #st.write(temp_df[[column[0]]].style.applymap(util.coba, data=temp_df, subset=[column[0]]))
-
-            with st.expander("Keterangan"):
-                st.write('🟥 Masih jauh dari target dalam RKP (>5% deviasi dari nilai target)')
-                st.write('🟨 Mendekati target dalam RKP (5% deviasi dari nilai target)')  
-                st.write('🟩 Sudah memenuhi target dalam RKP (>= atau <=)')    
-                st.write('⬜ Target belum tersedia dalam RKP pada tahun tersebut')                        
-    
+   
+    col1, col2 = st.columns((4,1))
+    with col1:
+        with st.expander("Keterangan Rentang"):
+            st.write('Semakin rendah Tingkat Pengangguran Terbuka, Tingkat Kemiskinan, dan Rasio Gini berarti semakin baik')
+    with col2:    
+        with st.expander("Keterangan Indikator"):
+            st.write('🟥 Masih jauh dari target dalam RKP (>5% deviasi dari nilai target)')
+            st.write('🟨 Mendekati target dalam RKP (5% deviasi dari nilai target)')  
+            st.write('🟩 Sudah memenuhi target dalam RKP (>= atau <=)')    
+            st.write('⬜ Target belum tersedia dalam RKP pada tahun tersebut') 
+        
 with tab2:
     if 'name_provinsi' in locals():
         st.subheader('Prediksi ' + target + ' pada Provinsi ' + name_provinsi)
@@ -146,6 +148,10 @@ with tab2:
         col4.metric("Root Mean Squared Error (RMSE)", str('{:.3f}'.format(results['RMSE'])))
         with col5:
             st.write('')
+        
+        with st.expander("Keterangan Hasil Prediksi"):
+                st.write('Dilakukan pelatihan terhadap model pada data historis tahun 2010-2019 dan dilakukan pengujian pada data tahun 2020-2021')
+                st.write('Semakin rendah hasil Root Mean Squared Error (RMSE) berarti semakin baik')
 
         st.success('Analisis Fungsi Anggaran Utama dalam Memprediksi ' + target)
         
@@ -161,6 +167,17 @@ with tab2:
         with col4:
             st.write('')
 
+        col1, col2 = st.columns(2)
+        with col1:
+            with st.expander("Keterangan Tingkat Keutamaan"):    
+                st.write('🟩 Tingkat keutamaan >= 0.5')
+                st.write('🟨 0.2 =< Tingkat keutamaan < 0.5')  
+                st.write('🟧 0.1 =< Tingkat keutamaan < 0.2')    
+                st.write('🟥 Tingkat keutamaan < 0.1')    
+        with col2:
+            with st.expander("Keterangan Fungsi Anggaran"):
+                    st.write('Data Fungsi Anggaran dalam Milyar Rupiah')
+        
 with tab3:
     if 'results' in locals():
         st.subheader('Simulasi Belanja Pemerintah Pusat Per Fungsi terhadap Capaian ' + target + ' pada Provinsi ' + name_provinsi)
