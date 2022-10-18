@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from sklearn import ensemble
 from sklearn.metrics import mean_squared_error
+import streamlit as st
 
 def read_map(df_mapping, provinsi):
     f = open('indonesia.geojson')  
@@ -103,7 +104,7 @@ def is_feature_importance(temp):
     else:
         return 'background-color: red'
 
-def is_target(value, data):                 #masih bug --> if else condition kebacanya kacau
+def coba(value, data):                 #masih bug --> if else condition kebacanya kacau
   for index, row in data.iterrows():
     deviasi=0
     if row['batas_bawah'] != '' and row['batas_atas']=='':
@@ -137,3 +138,35 @@ def is_target(value, data):                 #masih bug --> if else condition keb
           return 'background-color: red'
     else:
       return 'background-color: white'
+
+def is_target(temp_df, col) :                   #solusi 2 pake ini, tapi ga apply warna :') 
+  for index, row in temp_df.iterrows():
+    if row['batas_bawah'] != '' and row['batas_atas']=='':
+      deviasi = row['batas_bawah'] * 5/100
+      if row[col] > row['batas_bawah'] and row[col] <= row['batas_bawah']+deviasi:
+        st.write( row['tahun'], ': ',row[col], '--> kuning')
+      elif row[col] > row['batas_bawah'] and row[col] > row['batas_bawah']+deviasi:
+        st.write( row['tahun'], ': ',row[col], '--> merah')
+      elif row[col] < row['batas_bawah'] and row[col] >= row['batas_bawah']-deviasi:
+        st.write( row['tahun'], ': ',row[col], '--> kuning')
+      elif row[col] < row['batas_bawah'] and row[col] < row['batas_bawah']-deviasi:
+        st.write( row['tahun'], ': ',row[col], '--> merah')
+      elif row[col] == row['batas_bawah']:
+        st.write( row['tahun'], ': ',row[col], '--> hijau')
+    elif row['batas_bawah']!='' and row['batas_atas']!='':
+      if row[col] >= row['batas_bawah']:
+        deviasi = row['batas_atas'] * 5/100
+        if row[col] <= row['batas_atas']:
+          st.write( row['tahun'], ': ',row[col], '--> hijau')
+        elif row[col] > row['batas_atas'] and row[col] <= row['batas_atas']+deviasi:
+          st.write( row['tahun'], ': ',row[col], '--> kuning')
+        elif row[col] > row['batas_atas'] and row[col] > row['batas_atas']+deviasi:
+          st.write( row['tahun'], ': ',row[col], '--> merah')
+      elif row[col] <= row['batas_bawah']:
+        deviasi = row['batas_bawah'] * 5/100
+        if row[col] >= row['batas_bawah']-deviasi:
+          st.write( row['tahun'], ': ',row[col], '--> kuning')
+        elif row[col] < row['batas_bawah']+deviasi:
+          st.write( row['tahun'], ': ',row[col], '--> merah')
+    else:
+      st.write( row['tahun'], ': ',row[col], '--> putih')
