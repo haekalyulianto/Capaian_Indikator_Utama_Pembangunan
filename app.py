@@ -125,7 +125,8 @@ with tab1:
             with st.expander("Keterangan"):
                 st.write('🟥 Masih jauh dari target dalam RKP (>5% deviasi dari nilai target)')
                 st.write('🟨 Mendekati target dalam RKP (5% deviasi dari nilai target)')  
-                st.write('🟩 Sudah memenuhi target dalam RKP (>= atau <=)')                            
+                st.write('🟩 Sudah memenuhi target dalam RKP (>= atau <=)')    
+                st.write('⬜ Target belum tersedia dalam RKP pada tahun tersebut')                        
     
 with tab2:
     if 'name_provinsi' in locals():
