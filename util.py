@@ -144,29 +144,29 @@ def is_target(temp_df, col) :                   #solusi 2 pake ini, tapi ga appl
     if row['batas_bawah'] != '' and row['batas_atas']=='':
       deviasi = row['batas_bawah'] * 5/100
       if row[col] > row['batas_bawah'] and row[col] <= row['batas_bawah']+deviasi:
-        st.write( row['tahun'], ': ',row[col], '--> kuning')
+        st.write( '🟨',row['tahun'], ': ',row[col])
       elif row[col] > row['batas_bawah'] and row[col] > row['batas_bawah']+deviasi:
-        st.write( row['tahun'], ': ',row[col], '--> merah')
+        st.write( '🟥',row['tahun'], ': ',row[col])
       elif row[col] < row['batas_bawah'] and row[col] >= row['batas_bawah']-deviasi:
-        st.write( row['tahun'], ': ',row[col], '--> kuning')
+        st.write( '🟨',row['tahun'], ': ',row[col])
       elif row[col] < row['batas_bawah'] and row[col] < row['batas_bawah']-deviasi:
-        st.write( row['tahun'], ': ',row[col], '--> merah')
+        st.write( '🟥', row['tahun'], ': ',row[col])
       elif row[col] == row['batas_bawah']:
-        st.write( row['tahun'], ': ',row[col], '--> hijau')
+        st.write( '🟩',row['tahun'], ': ',row[col])
     elif row['batas_bawah']!='' and row['batas_atas']!='':
       if row[col] >= row['batas_bawah']:
         deviasi = row['batas_atas'] * 5/100
         if row[col] <= row['batas_atas']:
-          st.write( row['tahun'], ': ',row[col], '--> hijau')
+          st.write( '🟩',row['tahun'], ': ',row[col])
         elif row[col] > row['batas_atas'] and row[col] <= row['batas_atas']+deviasi:
-          st.write( row['tahun'], ': ',row[col], '--> kuning')
+          st.write( '🟨',row['tahun'], ': ',row[col])
         elif row[col] > row['batas_atas'] and row[col] > row['batas_atas']+deviasi:
-          st.write( row['tahun'], ': ',row[col], '--> merah')
+          st.write( '🟥',row['tahun'], ': ',row[col])
       elif row[col] <= row['batas_bawah']:
         deviasi = row['batas_bawah'] * 5/100
         if row[col] >= row['batas_bawah']-deviasi:
-          st.write( row['tahun'], ': ',row[col], '--> kuning')
+          st.write( '🟨',row['tahun'], ': ',row[col])
         elif row[col] < row['batas_bawah']+deviasi:
-          st.write( row['tahun'], ': ',row[col], '--> merah')
+          st.write( '🟥',row['tahun'], ': ',row[col])
     else:
-      st.write( row['tahun'], ': ',row[col], '--> putih')
+      st.write( row['tahun'], ': ',row[col])
