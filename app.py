@@ -6,6 +6,15 @@ import mapping
 from sklearn import ensemble
 from sklearn.multioutput import MultiOutputRegressor
 
+def changeprov():
+    indexgantiprov = df['provinsi'].loc[lambda x: x==st.session_state.state_name_provinsi].index[0]
+    #st.write(st.session_state['state_name_provinsi'])
+    if 'selected_points' in locals():
+        selected_points[0]['PointIndex'] = indexgantiprov
+    else:
+        selected_points = [{'pointIndex': indexgantiprov}]
+    
+
 # Konfigurasi Halaman
 st.set_page_config(page_title="Peta Indonesia", layout="wide")
 st.title('Capaian Indikator Utama Pembangunan di Indonesia')
@@ -107,14 +116,13 @@ with tab1:
             idx = int(selected_points[0]['pointIndex'])
             
             name_provinsi = df.iloc[idx]['provinsi']
+            st.session_state['state_name_provinsi'] = name_provinsi
             selected_provinsi = df['variabel'].iloc[idx]
             exec('results = util.prediction({})'.format(selected_provinsi))
     
     with col2:
-        st.warning('Silakan Pilih Provinsi pada Peta')
-        if 'name_provinsi' in locals():
-            st.write(target + ' di Provinsi '+ name_provinsi)
-
+        st.selectbox('Provinsi', (df['provinsi']), key='state_name_provinsi' , on_change=changeprov)
+        if 'selected_provinsi' in locals():
             exec('temp_df={}[[column[0]]].reset_index().drop("index", axis=1)'.format(selected_provinsi))
             temp_df=pd.concat([temp_df, filesasaran], axis=1)
 
@@ -132,6 +140,9 @@ with tab1:
             st.write('⬜ Target belum tersedia dalam RKP pada tahun tersebut') 
         
 with tab2:
+    if 'results' not in locals():
+        st.warning('Silakan Pilih Provinsi pada Peta')
+   
     if 'name_provinsi' in locals():
         st.subheader('Prediksi ' + target + ' pada Provinsi ' + name_provinsi)
     
@@ -180,6 +191,9 @@ with tab2:
                     st.write('Data Fungsi Anggaran dalam Milyar Rupiah')
         
 with tab3:
+    if 'results' not in locals():
+        st.warning('Silakan Pilih Provinsi pada Peta')
+    
     if 'results' in locals():
         st.subheader('Simulasi Belanja Pemerintah Pusat Per Fungsi terhadap Capaian ' + target + ' pada Provinsi ' + name_provinsi)
 
