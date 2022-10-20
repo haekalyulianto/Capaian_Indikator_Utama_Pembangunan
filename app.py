@@ -123,8 +123,12 @@ with tab1:
         if (st.session_state.selectboxchanged == 1):
             selected_points.append({'pointIndex' : -1})
 
+        if ('ever_clicked' in st.session_state):
+            selected_points.append({'pointIndex' : -1})
+
         # Visualisasi Peta
         if (len(selected_points) > 0):
+            st.session_state.ever_clicked = 1
             idx = int(selected_points[0]['pointIndex'])
 
             if (st.session_state.selectboxchanged == 1):
