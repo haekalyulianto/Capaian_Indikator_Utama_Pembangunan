@@ -8,12 +8,21 @@ from sklearn.multioutput import MultiOutputRegressor
 
 def changeprov():
     indexgantiprov = df['provinsi'].loc[lambda x: x==st.session_state.state_name_provinsi].index[0]
+    st.session_state.selectboxchanged = 1
+    st.session_state.index_provinsi = indexgantiprov
+
     #st.write(st.session_state['state_name_provinsi'])
     if 'selected_points' in locals():
-        selected_points[0]['PointIndex'] = indexgantiprov
+        selected_points.append({'pointIndex' : indexgantiprov})
+        #selected_points[0]['pointIndex'] = indexgantiprov
+        idx = int(selected_points[0]['pointIndex'])
     else:
-        selected_points = [{'pointIndex': indexgantiprov}]
-    
+        selected_points = [{'pointIndex': indexgantiprov}, {'pointIndex': indexgantiprov}]
+        idx = int(selected_points[0]['pointIndex'])
+
+if 'selectboxchanged' not in st.session_state:
+    st.session_state['selectboxchanged'] = 0
+
 # Konfigurasi Halaman
 st.set_page_config(page_title="Peta Indonesia", layout="wide")
 st.title('Capaian Indikator Utama Pembangunan di Indonesia')
@@ -108,12 +117,20 @@ with tab1:
     with col1:
         do_refresh = st.button('Refresh')
         peta = util.plot_map(df, indomap, tahun)
+
         selected_points = plotly_events(peta)
+        
+        if (st.session_state.selectboxchanged == 1):
+            selected_points.append({'pointIndex' : -1})
 
         # Visualisasi Peta
-        if(len(selected_points) > 0):
+        if (len(selected_points) > 0):
             idx = int(selected_points[0]['pointIndex'])
-            
+
+            if (st.session_state.selectboxchanged == 1):
+                idx = st.session_state.index_provinsi
+                st.session_state.selectboxchanged = 0
+
             name_provinsi = df.iloc[idx]['provinsi']
             st.session_state['state_name_provinsi'] = name_provinsi
             selected_provinsi = df['variabel'].iloc[idx]
