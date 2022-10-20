@@ -49,7 +49,7 @@ Sumber: https://github.com/superpikar/indonesia-geojson
 1. Main Program (*app.py*)
 2. Utilization Function (*util.py*)
 3. List mapping provinsi dengan data belanja pemerintah per fungsi per provinsi (*mapping.py*)
-4. Program untuk mengakuisisi data (*Proses Akuisisi.ipynb*)
+4. Program untuk mengakuisisi data (*Proses Akuisisi.py*)
 5. Requirement Dependencies (*requirements.txt*)
 
 ## Authors
