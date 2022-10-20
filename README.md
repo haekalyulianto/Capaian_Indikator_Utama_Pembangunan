@@ -19,7 +19,7 @@ Di repositori ini, terdapat 2 jenis file, yaitu **File Data** dan **File Kode**
 ### A. File Data
 **File Data** adalah file-file yang digunakan sebagai dataset untuk Dashboard yang dikembangkan. Berikut adalah penjelasan dari data yang digunakan.
 
-#### 1. Data Historis Tahun 2010-2021
+#### 1. Data Historis Tahun 2010-2022
 Sumber: https://bps.go.id
 1. Indeks Pembangunan Manusia (*Indeks Pembangunan Manusia.xlsx*)
 2. Laju Pertumbuhan Ekonomi (*Laju PDRB.xlsx*)
@@ -27,7 +27,7 @@ Sumber: https://bps.go.id
 4. Persentase Tingkat Kemiskinan (*persentasemiskin.xlsx*)
 5. Rasio Gini (*giniratio.xlsx*)
 
-#### 2. Sasaran Rencana Kerja Pemerintah 2010-2022
+#### 2. Sasaran Rencana Kerja Pemerintah Tahun 2010-2022
 Sumber: https://bappenas.go.id
 1. Target Indeks Pembangunan Manusia (*IPM.xlsx*)
 2. Target Laju Pertumbuhan Ekonomi (*LPE.xlsx*)
