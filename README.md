@@ -1,9 +1,19 @@
 # Analisis Prediktif Capaian Indikator Utama Pembangunan
 
+## Deskripsi Teknologi
+Untuk mengembangkan dashboard, digunakan **Bahasa Pemrograman Python** dengan **Library Streamlit** serta library lain yang didefinisikan pada file *requirements.txt*. 
+
+## Metode
+Untuk melakukan prediksi dan pengembangan simulasi belanja pemerintah per fungsi dan capaian indikator utama pembangunan di Indonesia, digunakan metode **Gradient Boost Tree**. Pemilihan metode ini didasari pada hasil RMSE terendah dari metode berikut:
+1. Gradient Boost Tree
+2. Linear Regression
+3. Support Vector Regression
+4. Long Short Term Memory
+
 ## Struktur
 Di repositori ini, terdapat 2 jenis file, yaitu **File Data** dan **File Kode**
 
-### File Data
+### A. File Data
 **File Data** adalah file-file yang digunakan sebagai dataset untuk Dashboard yang dikembangkan. Berikut adalah penjelasan dari data yang digunakan.
 
 #### 1. Data Historis Tahun 2010-2021
@@ -31,8 +41,12 @@ Sumber: https://github.com/superpikar/indonesia-geojson
 1. Koordinat Peta Indonesia per Provinsi (*indonesia.geojson*)
 2. Mapping Data Provinsi di Peta dengan Data Provinsi dari BPS dan Kemenkeu (*mappingprovinsi.csv*)
 
-### File Kode
-**File Kode** adalah file-file yang digunakan untuk mengembangkan Dashboard.
+### B. File Kode
+**File Kode** adalah file-file yang digunakan untuk mengembangkan Dashboard. Berikut adalah penjabaran dari file kode.
+1. Main Program (*app.py*)
+2. Helper Function (*util.py*)
+3. Program untuk mengakuisisi data (*Proses Akuisisi.ipynb*)
+4. Requirements (*requirements.txt*)
 
 ## Authors
 Haekal Rizky Yulianto  
