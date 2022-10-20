@@ -135,6 +135,9 @@ with tab1:
                 idx = st.session_state.index_provinsi
                 st.session_state.selectboxchanged = 0
 
+            if (selected_points[0]['pointIndex'] == -1):
+                idx = st.session_state.index_provinsi
+
             name_provinsi = df.iloc[idx]['provinsi']
             st.session_state['state_name_provinsi'] = name_provinsi
             selected_provinsi = df['variabel'].iloc[idx]
