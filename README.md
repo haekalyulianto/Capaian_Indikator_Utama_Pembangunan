@@ -48,7 +48,7 @@ Sumber: https://github.com/superpikar/indonesia-geojson
 **File Kode** adalah file-file yang digunakan untuk mengembangkan Dashboard. Berikut adalah penjabaran dari file kode.
 1. Main Program (*app.py*)
 2. Utilization Function (*util.py*)
-3. List mapping provinsi dengan data belanja pemerintah per fungsi per provinsi (mapping.py)
+3. List mapping provinsi dengan data belanja pemerintah per fungsi per provinsi (*mapping.py*)
 4. Program untuk mengakuisisi data (*Proses Akuisisi.ipynb*)
 5. Requirement Dependencies (*requirements.txt*)
 
