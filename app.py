@@ -244,7 +244,7 @@ with tab3:
                 X_train = X[:12]
                 y_train = y[:12]
                 
-                regressor = ensemble.GradientBoostingRegressor(random_state=42)
+                regressor = ensemble.GradientBoostingRegressor(random_state=0)
                 regressor.fit(X_train, y_train)
                 
                 y_pred = regressor.predict([[f1, f2, f3]])
@@ -270,7 +270,7 @@ with tab3:
                 y_train = X[:12]
                 X_train = y[:12]
                 
-                regressor = MultiOutputRegressor(ensemble.GradientBoostingRegressor(random_state=42))
+                regressor = MultiOutputRegressor(ensemble.GradientBoostingRegressor(random_state=0))
                 regressor.fit(X_train, y_train)
                 
                 y_pred = regressor.predict([[f1]])
