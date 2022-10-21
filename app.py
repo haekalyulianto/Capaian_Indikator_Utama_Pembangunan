@@ -211,7 +211,7 @@ with tab2:
                 st.write('🟥 Tingkat keutamaan < 0.1')    
         with col2:
             with st.expander("Keterangan Fungsi Anggaran"):
-                    st.write('Data Fungsi Anggaran dalam Milyar Rupiah')
+                    st.write('Data Fungsi Anggaran dalam Miliar Rupiah')
         
 with tab3:
     if 'results' not in locals():
@@ -277,8 +277,8 @@ with tab3:
 
                 col1, col2, col3 = st.columns(3)
                 with col1:
-                    st.metric('Prediksi Anggaran  ' + X.columns[0] +' (Dalam Milyar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))))
+                    st.metric('Prediksi Anggaran  ' + X.columns[0] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))))
                 with col2:
-                    st.metric('Prediksi Anggaran  ' + X.columns[1] +' (Dalam Milyar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,1:2]))))
+                    st.metric('Prediksi Anggaran  ' + X.columns[1] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,1:2]))))
                 with col3:
-                    st.metric('Prediksi Anggaran  ' + X.columns[2] +' (Dalam Milyar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,2:3]))))
+                    st.metric('Prediksi Anggaran  ' + X.columns[2] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,2:3]))))
