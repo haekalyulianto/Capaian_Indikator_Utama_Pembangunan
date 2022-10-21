@@ -66,7 +66,7 @@ def prediction(dfprov):
 
     returns = {}
 
-    reg = ensemble.GradientBoostingRegressor(random_state=42)
+    reg = ensemble.GradientBoostingRegressor(random_state=0)
     reg.fit(X_train, y_train)
     y_pred = reg.predict(X_test)
 
