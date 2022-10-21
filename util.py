@@ -108,6 +108,7 @@ def is_feature_importance(temp):
 def is_target(temp_df, col) :                
   for index, row in temp_df.iterrows():
     deviasi = statistics.stdev(temp_df[col])*0.05
+    # The higher the better
     if (col == 'IPM' or col == 'LPE'):
       if row['batas_bawah'] != '' and row['batas_atas']=='': 
         if row[col] >= row['batas_bawah']:
@@ -126,17 +127,14 @@ def is_target(temp_df, col) :
             st.write( '🟥',int(row['tahun']), ': ',row[col])
       else:
         st.write( '⬜', int(row['tahun']), ': ',row[col])
+    # The lower the better
     else:
       if row['batas_bawah'] != '' and row['batas_atas']=='': 
         if row[col] > row['batas_bawah'] and row[col] <= row['batas_bawah']+deviasi:
           st.write( '🟨',int(row['tahun']), ': ',row[col])
         elif row[col] > row['batas_bawah'] and row[col] > row['batas_bawah']+deviasi:
           st.write( '🟥',int(row['tahun']), ': ',row[col])
-        elif row[col] < row['batas_bawah'] and row[col] >= row['batas_bawah']-deviasi:
-          st.write( '🟨',int(row['tahun']), ': ',row[col])
-        elif row[col] < row['batas_bawah'] and row[col] < row['batas_bawah']-deviasi:
-          st.write( '🟥', int(row['tahun']), ': ',row[col])
-        elif row[col] == row['batas_bawah']:
+        elif row[col] <= row['batas_bawah']:
           st.write( '🟩',int(row['tahun']), ': ',row[col])
       elif row['batas_bawah']!='' and row['batas_atas']!='':
         if row[col] >= row['batas_bawah']:
@@ -145,11 +143,6 @@ def is_target(temp_df, col) :
           elif row[col] > row['batas_atas'] and row[col] <= row['batas_atas']+deviasi:
             st.write( '🟨',int(row['tahun']), ': ',row[col])
           elif row[col] > row['batas_atas'] and row[col] > row['batas_atas']+deviasi:
-            st.write( '🟥',int(row['tahun']), ': ',row[col])
-        elif row[col] <= row['batas_bawah']:
-          if row[col] >= row['batas_bawah']-deviasi:
-            st.write( '🟨',int(row['tahun']), ': ',row[col])
-          elif row[col] < row['batas_bawah']+deviasi:
             st.write( '🟥',int(row['tahun']), ': ',row[col])
       else:
         st.write( '⬜', int(row['tahun']), ': ',row[col])
