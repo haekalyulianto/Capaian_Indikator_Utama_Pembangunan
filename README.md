@@ -6,6 +6,19 @@ https://capaian-indikator-utama-pembangunan.streamlitapp.com/
 ## Deskripsi Teknologi
 Untuk mengembangkan dashboard, digunakan **Bahasa Pemrograman Python** dengan **Library Streamlit** serta library lain yang didefinisikan pada file *requirements.txt*. 
 
+## Tujuan
+1. **Pemantauan atas pencapaian Target RKP**
+
+    Dashboard yang dihasilkan akan mampu melakukan pemantauan atas capaian RKP pada tiap provinsi di Indonesia
+
+2. **Memberi rekomendasi dalam membuat keputusan**
+
+    Model pada dashboard mampu memberikan simulasi alokasi belanja pada fungsi anggaran utama per provinsi sesuai sasaran target RKP yang ditentukan
+
+3. **Mengoptimalkan alokasi belanja pemerintah**
+
+    Alokasi belanja dapat fokus pada fungsi anggaran utama per provinsi sehingga sasaran pembangunan dapat tercapai dengan memperhitungkan data historis
+
 ## Metode
 Untuk melakukan prediksi dan pengembangan simulasi belanja pemerintah per fungsi dan capaian indikator utama pembangunan di Indonesia, digunakan metode **Gradient Boost Tree**. Pemilihan metode ini didasari pada hasil RMSE terendah dari metode berikut:
 1. Gradient Boost Tree
@@ -19,7 +32,7 @@ Di repositori ini, terdapat 2 jenis file, yaitu **File Data** dan **File Kode**
 ### A. File Data
 **File Data** adalah file-file yang digunakan sebagai dataset untuk Dashboard yang dikembangkan. Berikut adalah penjelasan dari data yang digunakan.
 
-#### 1. Data Historis Tahun 2010-2022
+#### 1. Data Historis Indikator Utama Pembangunan Tahun 2010-2022
 Sumber: https://bps.go.id
 1. Indeks Pembangunan Manusia (*Indeks Pembangunan Manusia.xlsx*)
 2. Laju Pertumbuhan Ekonomi (*Laju PDRB.xlsx*)
