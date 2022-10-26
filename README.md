@@ -1,8 +1,5 @@
 # Analisis Prediktif Capaian Indikator Utama Pembangunan
 
-## Link Deployment
-https://capaian-indikator-utama-pembangunan.streamlitapp.com/
-
 ## Deskripsi Teknologi
 Untuk mengembangkan dashboard, digunakan **Bahasa Pemrograman Python** dengan **Library Streamlit** serta library lain yang didefinisikan pada file *requirements.txt*. 
 
