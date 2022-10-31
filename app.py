@@ -277,11 +277,25 @@ with tab3:
                 regressor.fit(X_train, y_train)
                 
                 y_pred = regressor.predict([[f1]])
+                    
+                percentage1 = ((float(y_pred[:,0:1])-f1val)/f1val)*100
+                percentage2 = ((float(y_pred[:,1:2])-f2val)/f2val)*100
+                percentage3 = ((float(y_pred[:,2:3])-f3val)/f3val)*100
 
+                st.warning('Anggaran Tahun 2021')
                 col1, col2, col3 = st.columns(3)
                 with col1:
-                    st.metric('Prediksi Anggaran  ' + X.columns[0] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))))
+                    st.metric('Anggaran ' + X.columns[0] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f1val))
                 with col2:
-                    st.metric('Prediksi Anggaran  ' + X.columns[1] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,1:2]))))
+                    st.metric('Anggaran ' + X.columns[1] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f2val))
                 with col3:
-                    st.metric('Prediksi Anggaran  ' + X.columns[2] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,2:3]))))
+                    st.metric('Anggaran ' + X.columns[2] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f3val))
+
+                st.warning('Prediksi Anggaran Tahun 2022')
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric('Prediksi Anggaran  ' + X.columns[0] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))), str('{:.3f}'.format(percentage1)) + '%', delta_color="inverse")
+                with col2:
+                    st.metric('Prediksi Anggaran  ' + X.columns[1] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,1:2]))), str('{:.3f}'.format(percentage2)) + '%', delta_color="inverse")
+                with col3:
+                    st.metric('Prediksi Anggaran  ' + X.columns[2] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,2:3]))), str('{:.3f}'.format(percentage3)) + '%', delta_color="inverse")
