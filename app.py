@@ -256,12 +256,24 @@ with tab3:
         
         st.success('Simulasi Fungsi Anggaran Utama yang Perlu Dikeluarkan untuk Mencapai ' + target + ' yang Diinginkan')
         with st.form("form_2"):
-            col1, col2, col3 = st.columns(3)
+            col1, col2, col3, col4 = st.columns(4)
             with col1:
                 st.write('')
             with col2:
                 f1 = st.number_input('Capaian ' + target + ' yang Diinginkan', value=results['y_test'].iloc[-1:].iloc[0])
             with col3:
+                st.write('Target ' + target + ' pada RKP Tahun 2022:')
+                if (target == 'Indeks Pembangunan Manusia'):
+                    st.write('73.41 - 73.46')
+                elif (target == 'Tingkat Kemiskinan'):
+                    st.write('8.50 - 9.00')
+                elif (target == 'Rasio Gini'):
+                    st.write('0.376 - 0.378')
+                elif (target == 'Laju Pertumbuhan Ekonomi'):
+                    st.write('5.20 - 5.50')
+                else:
+                    st.write('5.50 - 6.30')
+            with col4:
                 st.write('')
                 
             submitted = st.form_submit_button("Hitung")
