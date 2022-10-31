@@ -20,6 +20,9 @@ def changeprov():
         selected_points = [{'pointIndex': indexgantiprov}, {'pointIndex': indexgantiprov}]
         idx = int(selected_points[0]['pointIndex'])
 
+def changetarget():
+    del st.session_state['ever_clicked']
+
 if 'selectboxchanged' not in st.session_state:
     st.session_state['selectboxchanged'] = 0
 
@@ -37,7 +40,7 @@ with tab1:
         tahun = st.selectbox('Tahun', ([str(x) for x in range(2021, 2009, -1)]))
 
     with inputcol2:
-        target = st.selectbox('Indikator', ('Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka'), key=0)
+        target = st.selectbox('Indikator', ('Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka'), key=0, on_change=changetarget)
 
     filetarget = 'Indeks Pembangunan Manusia.xlsx'
     sasaran = 'IPM.xlsx'
