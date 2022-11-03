@@ -462,7 +462,7 @@ with tab4:
             with col2:
                 st.write('Capaian ' + targets[1] + ' yang Diinginkan: ')
                 f2 = st.number_input('', value=9, label_visibility='collapsed')
-                st.write('Target ' + targets[1] + ' RKP Tahun 2022: 9')
+                st.write('Target ' + targets[1] + ' RKP Tahun 2022: 9.0')
             with col3:
                 st.write('Capaian ' + targets[2] + ' yang Diinginkan: ')
                 f3 = st.number_input('', value=0.378, label_visibility='collapsed')
