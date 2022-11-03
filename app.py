@@ -21,7 +21,8 @@ def changeprov():
         idx = int(selected_points[0]['pointIndex'])
 
 def changetarget():
-    del st.session_state['ever_clicked']
+    if ('ever_clicked' in st.session_state):
+        del st.session_state['ever_clicked']
 
 if 'selectboxchanged' not in st.session_state:
     st.session_state['selectboxchanged'] = 0
