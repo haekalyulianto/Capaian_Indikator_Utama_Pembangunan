@@ -461,7 +461,7 @@ with tab4:
                 st.write('Target ' + targets[0] + ' RKP Tahun 2022: 73.46')
             with col2:
                 st.write('Capaian ' + targets[1] + ' yang Diinginkan: ')
-                f2 = st.number_input('', value=9, label_visibility='collapsed')
+                f2 = st.number_input('', value=9.0, label_visibility='collapsed')
                 st.write('Target ' + targets[1] + ' RKP Tahun 2022: 9.0')
             with col3:
                 st.write('Capaian ' + targets[2] + ' yang Diinginkan: ')
