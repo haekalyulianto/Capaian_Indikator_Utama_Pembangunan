@@ -447,60 +447,64 @@ with tab3:
         #st.success('Simulasi Capaian 5 Indikator Utama Pembangunan yang Akan Dicapai Berdasarkan Fungsi Anggaran Utama yang Dikeluarkan' )   
 
 with tab4:
-    st.subheader('Simulasi Belanja Pemerintah Per Fungsi terhadap Seluruh Indikator Utama Pembangunan pada Provinsi ' + name_provinsi)
-    with st.form("form_3"):
-        col1, col2, col3, col4, col5 = st.columns(5)
-        with col1:
-            st.write('Capaian ' + targets[0] + ' yang Diinginkan')
-            f1 = st.number_input('', value=resultsallcompiled[0]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
-        with col2:
-            st.write('Capaian ' + targets[1] + ' yang Diinginkan')
-            f2 = st.number_input('', value=resultsallcompiled[1]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
-        with col3:
-            st.write('Capaian ' + targets[2] + ' yang Diinginkan')
-            f3 = st.number_input('', value=resultsallcompiled[2]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
-        with col4:
-            st.write('Capaian ' + targets[3] + ' yang Diinginkan')
-            f4 = st.number_input('', value=resultsallcompiled[3]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
-        with col5:
-            st.write('Capaian ' + targets[4] + ' yang Diinginkan')
-            f5 = st.number_input('', value=resultsallcompiled[4]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
-            
-        f1val = dfalltargettop3.iloc[:, 0:1].iloc[len(dfalltargettop3)-1].iloc[0]
-        f2val = dfalltargettop3.iloc[:, 1:2].iloc[len(dfalltargettop3)-1].iloc[0]
-        f3val = dfalltargettop3.iloc[:, 2:3].iloc[len(dfalltargettop3)-1].iloc[0]
-
-        submitted = st.form_submit_button("Hitung")
-        if submitted:
-            y = dfalltargettop3.iloc[:, 0:3]
-            X = dfalltargettop3.iloc[:, 3:8]
-
-            y_train = y[:12]
-            X_train = X[:12]
-            
-            regressor = MultiOutputRegressor(ensemble.GradientBoostingRegressor(random_state=0))
-            regressor.fit(X_train, y_train)
-            
-            y_pred = regressor.predict([[f1, f2, f3, f4, f5]])
+    if 'results' not in locals():
+        st.warning('Silakan Pilih Provinsi pada Peta')
+    
+    if 'results' in locals():
+        st.subheader('Simulasi Belanja Pemerintah Per Fungsi terhadap Seluruh Indikator Utama Pembangunan pada Provinsi ' + name_provinsi)
+        with st.form("form_3"):
+            col1, col2, col3, col4, col5 = st.columns(5)
+            with col1:
+                st.write('Capaian ' + targets[0] + ' yang Diinginkan')
+                f1 = st.number_input('', value=resultsallcompiled[0]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
+            with col2:
+                st.write('Capaian ' + targets[1] + ' yang Diinginkan')
+                f2 = st.number_input('', value=resultsallcompiled[1]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
+            with col3:
+                st.write('Capaian ' + targets[2] + ' yang Diinginkan')
+                f3 = st.number_input('', value=resultsallcompiled[2]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
+            with col4:
+                st.write('Capaian ' + targets[3] + ' yang Diinginkan')
+                f4 = st.number_input('', value=resultsallcompiled[3]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
+            with col5:
+                st.write('Capaian ' + targets[4] + ' yang Diinginkan')
+                f5 = st.number_input('', value=resultsallcompiled[4]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
                 
-            percentage1 = ((float(y_pred[:,0:1])-f1val)/f1val)*100
-            percentage2 = ((float(y_pred[:,1:2])-f2val)/f2val)*100
-            percentage3 = ((float(y_pred[:,2:3])-f3val)/f3val)*100
+            f1val = dfalltargettop3.iloc[:, 0:1].iloc[len(dfalltargettop3)-1].iloc[0]
+            f2val = dfalltargettop3.iloc[:, 1:2].iloc[len(dfalltargettop3)-1].iloc[0]
+            f3val = dfalltargettop3.iloc[:, 2:3].iloc[len(dfalltargettop3)-1].iloc[0]
 
-            st.warning('Anggaran Tahun 2021')
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric('Anggaran ' + dfalltargettop3.columns[0] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f1val))
-            with col2:
-                st.metric('Anggaran ' + dfalltargettop3.columns[1] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f2val))
-            with col3:
-                st.metric('Anggaran ' + dfalltargettop3.columns[2] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f3val))
+            submitted = st.form_submit_button("Hitung")
+            if submitted:
+                y = dfalltargettop3.iloc[:, 0:3]
+                X = dfalltargettop3.iloc[:, 3:8]
 
-            st.warning('Prediksi Anggaran Tahun 2022')
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric('Prediksi Anggaran ' + dfalltargettop3.columns[0] + ' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))), str('{:.3f}'.format(percentage1)) + '%', delta_color="inverse")
-            with col2:
-                st.metric('Prediksi Anggaran ' + dfalltargettop3.columns[1] + ' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,1:2]))), str('{:.3f}'.format(percentage2)) + '%', delta_color="inverse")
-            with col3:
-                st.metric('Prediksi Anggaran ' + dfalltargettop3.columns[2] + ' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,2:3]))), str('{:.3f}'.format(percentage3)) + '%', delta_color="inverse")
+                y_train = y[:12]
+                X_train = X[:12]
+                
+                regressor = MultiOutputRegressor(ensemble.GradientBoostingRegressor(random_state=0))
+                regressor.fit(X_train, y_train)
+                
+                y_pred = regressor.predict([[f1, f2, f3, f4, f5]])
+                    
+                percentage1 = ((float(y_pred[:,0:1])-f1val)/f1val)*100
+                percentage2 = ((float(y_pred[:,1:2])-f2val)/f2val)*100
+                percentage3 = ((float(y_pred[:,2:3])-f3val)/f3val)*100
+
+                st.warning('Anggaran Tahun 2021')
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric('Anggaran ' + dfalltargettop3.columns[0] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f1val))
+                with col2:
+                    st.metric('Anggaran ' + dfalltargettop3.columns[1] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f2val))
+                with col3:
+                    st.metric('Anggaran ' + dfalltargettop3.columns[2] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f3val))
+
+                st.warning('Prediksi Anggaran Tahun 2022')
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric('Prediksi Anggaran ' + dfalltargettop3.columns[0] + ' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))), str('{:.3f}'.format(percentage1)) + '%', delta_color="inverse")
+                with col2:
+                    st.metric('Prediksi Anggaran ' + dfalltargettop3.columns[1] + ' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,1:2]))), str('{:.3f}'.format(percentage2)) + '%', delta_color="inverse")
+                with col3:
+                    st.metric('Prediksi Anggaran ' + dfalltargettop3.columns[2] + ' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,2:3]))), str('{:.3f}'.format(percentage3)) + '%', delta_color="inverse")
