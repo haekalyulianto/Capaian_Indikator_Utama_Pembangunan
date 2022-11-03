@@ -454,21 +454,27 @@ with tab4:
         st.subheader('Simulasi Belanja Pemerintah Per Fungsi terhadap Seluruh Indikator Utama Pembangunan pada Provinsi ' + name_provinsi)
         with st.form("form_3"):
             col1, col2, col3, col4, col5 = st.columns(5)
+            
             with col1:
-                st.write('Capaian ' + targets[0] + ' yang Diinginkan')
-                f1 = st.number_input('', value=resultsallcompiled[0]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
+                st.write('Capaian ' + targets[0] + ' yang Diinginkan: ')
+                f1 = st.number_input('', value=73.46, label_visibility='collapsed')
+                st.write('Target ' + targets[0] + ' pada RKP Tahun 2022: 73.46')
             with col2:
-                st.write('Capaian ' + targets[1] + ' yang Diinginkan')
-                f2 = st.number_input('', value=resultsallcompiled[1]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
+                st.write('Capaian ' + targets[1] + ' yang Diinginkan: ')
+                f2 = st.number_input('', value=9, label_visibility='collapsed')
+                st.write('Target ' + targets[1] + ' pada RKP Tahun 2022: 9')
             with col3:
-                st.write('Capaian ' + targets[2] + ' yang Diinginkan')
-                f3 = st.number_input('', value=resultsallcompiled[2]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
+                st.write('Capaian ' + targets[2] + ' yang Diinginkan: ')
+                f3 = st.number_input('', value=0.378, label_visibility='collapsed')
+                st.write('Target ' + targets[2] + ' pada RKP Tahun 2022: 0.378')
             with col4:
-                st.write('Capaian ' + targets[3] + ' yang Diinginkan')
-                f4 = st.number_input('', value=resultsallcompiled[3]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
+                st.write('Capaian ' + targets[3] + ' yang Diinginkan: ')
+                f4 = st.number_input('', value=5.5, label_visibility='collapsed')
+                st.write('Target ' + targets[3] + ' pada RKP Tahun 2022: 5.5')
             with col5:
-                st.write('Capaian ' + targets[4] + ' yang Diinginkan')
-                f5 = st.number_input('', value=resultsallcompiled[4]['y_test'].iloc[-1:].iloc[0], label_visibility='collapsed')
+                st.write('Capaian ' + targets[4] + ' yang Diinginkan: ')
+                f5 = st.number_input('', value=6.3, label_visibility='collapsed')
+                st.write('Target ' + targets[4] + ' pada RKP Tahun 2022: 6.3')
                 
             f1val = dfalltargettop3.iloc[:, 0:1].iloc[len(dfalltargettop3)-1].iloc[0]
             f2val = dfalltargettop3.iloc[:, 1:2].iloc[len(dfalltargettop3)-1].iloc[0]
