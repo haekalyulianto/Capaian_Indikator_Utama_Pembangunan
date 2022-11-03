@@ -89,6 +89,8 @@ def prediction(dfprov):
     feature=importance_df.iloc[:3,:1].T.values.tolist()
     flat_list = [item for sublist in feature for item in sublist]
     flat_list.append(namakolom)
+
+    returns['dfprovawal'] = dfprov
     dfprov = dfprov[dfprov.columns.intersection(flat_list)]
 
     returns['dfprov'] = dfprov
@@ -103,7 +105,7 @@ def is_feature_importance(temp):
     elif temp >= 0.1 and temp < 0.2:
         return 'background-color: orange'
     else:
-        return 'background-color: red'
+        return 'background-color: pink'
 
 def is_target(temp_df, col) :                
   for index, row in temp_df.iterrows():
