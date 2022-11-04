@@ -27,13 +27,11 @@ def changetarget():
 if 'selectboxchanged' not in st.session_state:
     st.session_state['selectboxchanged'] = 0
 
-# Konfigurasi Halaman
 st.set_page_config(page_title="Capaian Indikator Utama Pembangunan di Indonesia", layout="wide")
 st.title('Capaian Indikator Utama Pembangunan di Indonesia')
 
 tab1, tab2, tab3, tab4 = st.tabs(["1. Visualisasi Data", "2. Prediksi Data", "3. Simulasi Satu Indikator", "4. Simulasi Seluruh Indikator"])
 
-# Pemrosesan Data
 with tab1:
     inputcol1, inputcol2 = st.columns(2)
 
@@ -100,19 +98,16 @@ with tab1:
 
     mappingprovinsiAPBN = mapping.mappingprovinsiAPBN
 
-    # Pisah - Pisah --> 11 fitur Anggaran Per Fungsi
     for x in mappingprovinsiAPBN.keys():
-        firstcol = (x-1)*11 # Jumlah parameter
+        firstcol = (x-1)*11 
         lastcol = x*11 
         exec('{} = APBN.iloc[:, {}:{}]'.format(mappingprovinsiAPBN[x], firstcol, lastcol))
         exec('for col in {}.columns: {}[col] = {}[col].astype(int)'.format(mappingprovinsiAPBN[x],mappingprovinsiAPBN[x],mappingprovinsiAPBN[x]))
 
-    # Join Join --> Kolom target dengan 11 fitur Anggaran Per Fungsi
     for x in provinsi:
         exec('{}.index = {}.index.map(str)'.format(x, x))
         exec('{} = pd.concat([{}, {}APBN], axis=1, join="inner")'.format(x, x, x))
 
-    # Pemrosesan Peta
     st.success('Data ' + target + ' per Provinsi')
     exec('df_mapping = {}'.format(column[0]))
     df, indomap = util.read_map(df_mapping, provinsi)
@@ -130,7 +125,6 @@ with tab1:
         if ('ever_clicked' in st.session_state):
             selected_points.append({'pointIndex' : -1})
 
-        # Visualisasi Peta
         if (len(selected_points) > 0):
             st.session_state.ever_clicked = 1
             idx = int(selected_points[0]['pointIndex'])
@@ -157,7 +151,6 @@ with tab1:
 
     resultsallcompiled = []
     if (len(selected_points) > 0):
-        # ======================== ALL
             
         targets = ['Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka']
         filetargets = ['Indeks Pembangunan Manusia.xlsx', 'persentasemiskin.xlsx', 'giniratio.xlsx', 'Laju PDRB.xlsx', 'pengangguran.xlsx']
@@ -200,26 +193,21 @@ with tab1:
 
             mappingprovinsiAPBN = mapping.mappingprovinsiAPBN
 
-            # Pisah - Pisah --> 11 fitur Anggaran Per Fungsi
             for x in mappingprovinsiAPBN.keys():
-                firstcol = (x-1)*11 # Jumlah parameter
+                firstcol = (x-1)*11
                 lastcol = x*11 
                 exec('{} = APBN.iloc[:, {}:{}]'.format(mappingprovinsiAPBN[x], firstcol, lastcol))
                 exec('for col in {}.columns: {}[col] = {}[col].astype(int)'.format(mappingprovinsiAPBN[x],mappingprovinsiAPBN[x],mappingprovinsiAPBN[x]))
 
-            # Join Join --> Kolom target dengan 11 fitur Anggaran Per Fungsi
             for x in provinsi:
                 exec('{}.index = {}.index.map(str)'.format(x, x))
                 exec('{} = pd.concat([{}, {}APBN], axis=1, join="inner")'.format(x, x, x))
 
-            # Pemrosesan Peta
             exec('df_mapping = {}'.format(column2[0]))
             df, indomap = util.read_map(df_mapping, provinsi)
             selected_provinsi = df['variabel'].iloc[idx]
             exec('resultsall = util.prediction({})'.format(selected_provinsi))
             resultsallcompiled.append(resultsall)
-
-        # ======================== ALL
    
     col1, col2 = st.columns((4,1))
     with col1:
@@ -281,8 +269,8 @@ with tab2:
                 st.write('🟥 Tingkat keutamaan < 0.1')    
         with col2:
             with st.expander("Keterangan Fungsi Anggaran"):
-                    st.write('1. Fungsi anggaran utama didapat dari feature importance')
-                    st.write('2. Fungsi anggaran dalam miliar rupiah')
+                    st.write('Fungsi anggaran utama didapat dari feature importance')
+                    st.write('Fungsi anggaran dalam miliar rupiah')
 
         targets = ['Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka']
         features1 = []
