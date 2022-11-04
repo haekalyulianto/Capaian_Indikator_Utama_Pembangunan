@@ -282,7 +282,7 @@ with tab2:
         with col2:
             with st.expander("Keterangan Fungsi Anggaran"):
                     st.write('1. Fungsi anggaran utama didapat dari feature importance')
-                    st.write('2. Data Fungsi anggaran dalam miliar rupiah')
+                    st.write('2. Fungsi anggaran dalam miliar rupiah')
 
         targets = ['Indeks Pembangunan Manusia', 'Tingkat Kemiskinan', 'Rasio Gini', 'Laju Pertumbuhan Ekonomi', 'Tingkat Pengangguran Terbuka']
         features1 = []
@@ -343,7 +343,7 @@ with tab2:
                 st.write('🟥 Tingkat keutamaan < 0.1')    
         with col2:
             with st.expander("Keterangan Fungsi Anggaran"):
-                    st.write('Fungsi anggaran utama didapat dari kesamaan Fungsi anggaran utama pada seluruh 5 indikator utama pembangunan')
+                    st.write('Fungsi anggaran utama didapat dari kesamaan fungsi anggaran utama pada seluruh 5 indikator utama pembangunan')
         
 with tab3:
     if 'results' not in locals():
