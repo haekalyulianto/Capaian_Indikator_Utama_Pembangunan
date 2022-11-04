@@ -55,7 +55,6 @@ def plot_map(df, indomap, tahun):
 def prediction(dfprov):
     namakolom = dfprov.columns[0]
 
-    # Tahap 1
     X = dfprov.iloc[:, 1:12]
     y = dfprov.iloc[:,0]
     
@@ -85,7 +84,7 @@ def prediction(dfprov):
     
     returns['importance_df'] = importance_df
 
-    # Pilih 3 Fitur Utama
+    # Pilih Fitur Utama
     feature=importance_df.iloc[:3,:1].T.values.tolist()
     flat_list = [item for sublist in feature for item in sublist]
     flat_list.append(namakolom)
@@ -110,7 +109,7 @@ def is_feature_importance(temp):
 def is_target(temp_df, col) :                
   for index, row in temp_df.iterrows():
     deviasi = statistics.stdev(temp_df[col])*0.05
-    # The higher the better
+
     if (col == 'IPM' or col == 'LPE'):
       if row['batas_bawah'] != '' and row['batas_atas']=='': 
         if row[col] >= row['batas_bawah']:
@@ -129,7 +128,7 @@ def is_target(temp_df, col) :
             st.write( '🟥',int(row['tahun']), ': ',row[col])
       else:
         st.write( '⬜', int(row['tahun']), ': ',row[col])
-    # The lower the better
+
     else:
       if row['batas_bawah'] != '' and row['batas_atas']=='': 
         if row[col] > row['batas_bawah'] and row[col] <= row['batas_bawah']+deviasi:
