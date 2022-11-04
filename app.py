@@ -426,16 +426,16 @@ with tab3:
                 percentage2 = ((float(y_pred[:,1:2])-f2val)/f2val)*100
                 percentage3 = ((float(y_pred[:,2:3])-f3val)/f3val)*100
 
-                st.warning('Anggaran Tahun 2021')
+                st.warning('Anggaran Saat Ini')
                 col1, col2, col3 = st.columns(3)
                 with col1:
-                    st.metric('Anggaran ' + X.columns[0] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f1val))
+                    st.metric('Anggaran ' + X.columns[0] + ' Saat Ini (Dalam Miliar Rupiah): ', str(f1val))
                 with col2:
-                    st.metric('Anggaran ' + X.columns[1] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f2val))
+                    st.metric('Anggaran ' + X.columns[1] + ' Saat Ini (Dalam Miliar Rupiah): ', str(f2val))
                 with col3:
-                    st.metric('Anggaran ' + X.columns[2] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f3val))
+                    st.metric('Anggaran ' + X.columns[2] + ' Saat Ini (Dalam Miliar Rupiah): ', str(f3val))
 
-                st.warning('Prediksi Anggaran Tahun 2022')
+                st.warning('Prediksi Anggaran yang Diinginkan')
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric('Prediksi Anggaran  ' + X.columns[0] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))), str('{:.3f}'.format(percentage1)) + '%', delta_color="inverse")
@@ -497,16 +497,16 @@ with tab4:
                 percentage2 = ((float(y_pred[:,1:2])-f2val)/f2val)*100
                 percentage3 = ((float(y_pred[:,2:3])-f3val)/f3val)*100
 
-                st.warning('Anggaran Tahun 2021')
+                st.warning('Anggaran Saat Ini')
                 col1, col2, col3 = st.columns(3)
                 with col1:
-                    st.metric('Anggaran ' + dfalltargettop3.columns[0] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f1val))
+                    st.metric('Anggaran ' + dfalltargettop3.columns[0] + ' Saat Ini (Dalam Miliar Rupiah): ', str(f1val))
                 with col2:
-                    st.metric('Anggaran ' + dfalltargettop3.columns[1] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f2val))
+                    st.metric('Anggaran ' + dfalltargettop3.columns[1] + ' Saat Ini (Dalam Miliar Rupiah): ', str(f2val))
                 with col3:
-                    st.metric('Anggaran ' + dfalltargettop3.columns[2] + ' Tahun 2021 (Dalam Miliar Rupiah): ', str(f3val))
+                    st.metric('Anggaran ' + dfalltargettop3.columns[2] + ' Saat Ini (Dalam Miliar Rupiah): ', str(f3val))
 
-                st.warning('Prediksi Anggaran Tahun 2022')
+                st.warning('Prediksi Anggaran yang Diinginkan')
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric('Prediksi Anggaran ' + dfalltargettop3.columns[0] + ' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))), str('{:.3f}'.format(percentage1)) + '%', delta_color="inverse")
