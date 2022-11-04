@@ -84,7 +84,6 @@ def prediction(dfprov):
     
     returns['importance_df'] = importance_df
 
-    # Pilih Fitur Utama
     feature=importance_df.iloc[:3,:1].T.values.tolist()
     flat_list = [item for sublist in feature for item in sublist]
     flat_list.append(namakolom)
