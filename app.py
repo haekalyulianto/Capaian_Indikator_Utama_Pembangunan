@@ -13,10 +13,8 @@ def changeprov():
     st.session_state.selectboxchanged = 1
     st.session_state.index_provinsi = indexgantiprov
 
-    #st.write(st.session_state['state_name_provinsi'])
     if 'selected_points' in locals():
         selected_points.append({'pointIndex' : indexgantiprov})
-        #selected_points[0]['pointIndex'] = indexgantiprov
         idx = int(selected_points[0]['pointIndex'])
     else:
         selected_points = [{'pointIndex': indexgantiprov}, {'pointIndex': indexgantiprov}]
@@ -102,14 +100,14 @@ with tab1:
 
     mappingprovinsiAPBN = mapping.mappingprovinsiAPBN
 
-    # Pisah - Pisah --> 11 fitur APBN Per Fungsi
+    # Pisah - Pisah --> 11 fitur Anggaran Per Fungsi
     for x in mappingprovinsiAPBN.keys():
         firstcol = (x-1)*11 # Jumlah parameter
         lastcol = x*11 
         exec('{} = APBN.iloc[:, {}:{}]'.format(mappingprovinsiAPBN[x], firstcol, lastcol))
         exec('for col in {}.columns: {}[col] = {}[col].astype(int)'.format(mappingprovinsiAPBN[x],mappingprovinsiAPBN[x],mappingprovinsiAPBN[x]))
 
-    # Join Join --> Kolom target dengan 11 fitur APBN Per Fungsi
+    # Join Join --> Kolom target dengan 11 fitur Anggaran Per Fungsi
     for x in provinsi:
         exec('{}.index = {}.index.map(str)'.format(x, x))
         exec('{} = pd.concat([{}, {}APBN], axis=1, join="inner")'.format(x, x, x))
@@ -202,14 +200,14 @@ with tab1:
 
             mappingprovinsiAPBN = mapping.mappingprovinsiAPBN
 
-            # Pisah - Pisah --> 11 fitur APBN Per Fungsi
+            # Pisah - Pisah --> 11 fitur Anggaran Per Fungsi
             for x in mappingprovinsiAPBN.keys():
                 firstcol = (x-1)*11 # Jumlah parameter
                 lastcol = x*11 
                 exec('{} = APBN.iloc[:, {}:{}]'.format(mappingprovinsiAPBN[x], firstcol, lastcol))
                 exec('for col in {}.columns: {}[col] = {}[col].astype(int)'.format(mappingprovinsiAPBN[x],mappingprovinsiAPBN[x],mappingprovinsiAPBN[x]))
 
-            # Join Join --> Kolom target dengan 11 fitur APBN Per Fungsi
+            # Join Join --> Kolom target dengan 11 fitur Anggaran Per Fungsi
             for x in provinsi:
                 exec('{}.index = {}.index.map(str)'.format(x, x))
                 exec('{} = pd.concat([{}, {}APBN], axis=1, join="inner")'.format(x, x, x))
@@ -315,7 +313,6 @@ with tab2:
             dfalltargettop3[targets[i]] = resultsallcompiled[i]['dfprov'][[resultsallcompiled[i]['dfprov'].columns[0]]]
 
         st.success('Analisis Fungsi Anggaran Utama dalam Memprediksi Seluruh 5 Indikator Utama Pembangunan')
-        #st.write(sorted_by_second)
 
         lsa = []
         lsb = []
@@ -435,7 +432,7 @@ with tab3:
                 with col3:
                     st.metric('Anggaran ' + X.columns[2] + ' Saat Ini (Dalam Miliar Rupiah): ', str(f3val))
 
-                st.warning('Prediksi Anggaran yang Diinginkan')
+                st.warning('Prediksi Anggaran yang Perlu Dikeluarkan')
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric('Prediksi Anggaran  ' + X.columns[0] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))), str('{:.3f}'.format(percentage1)) + '%', delta_color="inverse")
@@ -443,8 +440,6 @@ with tab3:
                     st.metric('Prediksi Anggaran  ' + X.columns[1] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,1:2]))), str('{:.3f}'.format(percentage2)) + '%', delta_color="inverse")
                 with col3:
                     st.metric('Prediksi Anggaran  ' + X.columns[2] +' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,2:3]))), str('{:.3f}'.format(percentage3)) + '%', delta_color="inverse")
-
-        #st.success('Simulasi Capaian 5 Indikator Utama Pembangunan yang Akan Dicapai Berdasarkan Fungsi Anggaran Utama yang Dikeluarkan' )   
 
 with tab4:
     if 'results' not in locals():
@@ -506,7 +501,7 @@ with tab4:
                 with col3:
                     st.metric('Anggaran ' + dfalltargettop3.columns[2] + ' Saat Ini (Dalam Miliar Rupiah): ', str(f3val))
 
-                st.warning('Prediksi Anggaran yang Diinginkan')
+                st.warning('Prediksi Anggaran yang Perlu Dikeluarkan')
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric('Prediksi Anggaran ' + dfalltargettop3.columns[0] + ' (Dalam Miliar Rupiah): ', str('{:.3f}'.format(float(y_pred[:,0:1]))), str('{:.3f}'.format(percentage1)) + '%', delta_color="inverse")
