@@ -6,15 +6,15 @@ Untuk mengembangkan dashboard, digunakan **Bahasa Pemrograman Python** dengan **
 ## Tujuan
 1. **Pemantauan atas pencapaian Target RKP**
 
-    Dashboard yang dihasilkan akan mampu melakukan pemantauan atas capaian RKP pada tiap provinsi di Indonesia
+    Dashboard yang dihasilkan mampu melakukan pemantauan atas capaian RKP pada tiap provinsi di Indonesia
 
-2. **Memberi rekomendasi dalam membuat keputusan**
+2. **Memberikan informasi fungsi anggaran utama**
 
-    Model pada dashboard mampu memberikan simulasi alokasi belanja pada fungsi anggaran utama per provinsi sesuai sasaran target RKP yang ditentukan
+    Model pada dashboard mampu memberikan informasi fungsi anggaran utama berdasarkan feature importance dalam memprediksi indikator utama pembangunan
 
-3. **Mengoptimalkan alokasi belanja pemerintah**
+3. **Memberikan rekomendasi pendukung keputusan**
 
-    Model pada dashboard mampu mengoptimalkan alokasi fungsi anggaran utama per provinsi sehingga seluruh sasaran indikator utama pembangunan dapat tercapai dengan memperhitungkan data historis
+    Model pada dashboard mampu memberikan simulasi alokasi belanja pada fungsi anggaran utama per provinsi sesuai sasaran target RKP pada seluruh indikator utama pembangunan
 
 ## Metode
 Untuk melakukan prediksi dan pengembangan simulasi belanja pemerintah per fungsi dan capaian indikator utama pembangunan di Indonesia, digunakan metode **Gradient Boost Tree**. Pemilihan metode ini didasari pada hasil RMSE terendah dari metode berikut:
