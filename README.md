@@ -4,15 +4,15 @@
 Untuk mengembangkan dashboard, digunakan **Bahasa Pemrograman Python** dengan **Library Streamlit** serta library lain yang didefinisikan pada file *requirements.txt*. 
 
 ## Tujuan
-1. **Pemantauan atas pencapaian Target RKP**
+1. **Pemantauan atas Pencapaian Target RKP**
 
     Dashboard yang dihasilkan mampu melakukan pemantauan atas capaian RKP pada tiap provinsi di Indonesia
 
-2. **Memberikan informasi fungsi anggaran utama**
+2. **Memberikan Informasi Fungsi Anggaran Utama**
 
     Model pada dashboard mampu memberikan informasi fungsi anggaran utama berdasarkan feature importance dalam memprediksi indikator utama pembangunan
 
-3. **Memberikan rekomendasi pendukung keputusan**
+3. **Memberikan Rekomendasi Pendukung Keputusan**
 
     Model pada dashboard mampu memberikan simulasi alokasi belanja pada fungsi anggaran utama per provinsi sesuai sasaran target RKP pada seluruh indikator utama pembangunan
 
