@@ -14,7 +14,7 @@ Untuk mengembangkan dashboard, digunakan **Bahasa Pemrograman Python** dengan **
 
 3. **Mengoptimalkan alokasi belanja pemerintah**
 
-    Alokasi belanja dapat fokus pada fungsi anggaran utama per provinsi sehingga sasaran pembangunan dapat tercapai dengan memperhitungkan data historis
+    Model pada dashboard mampu mengoptimalkan alokasi fungsi anggaran utama per provinsi sehingga seluruh sasaran indikator utama pembangunan dapat tercapai dengan memperhitungkan data historis
 
 ## Metode
 Untuk melakukan prediksi dan pengembangan simulasi belanja pemerintah per fungsi dan capaian indikator utama pembangunan di Indonesia, digunakan metode **Gradient Boost Tree**. Pemilihan metode ini didasari pada hasil RMSE terendah dari metode berikut:
@@ -37,7 +37,12 @@ Sumber: https://bps.go.id
 4. Persentase Tingkat Kemiskinan (*persentasemiskin.xlsx*)
 5. Rasio Gini (*giniratio.xlsx*)
 
-#### 2. Sasaran Rencana Kerja Pemerintah Tahun 2010-2022
+#### 2. Data Historis Indikator Lainnya Tahun 2010-2022
+Sumber: https://bps.go.id
+1. Kemampuan Fiskal Daerah (*KFD.xlsx*)
+2. Inflasi Umum (*Inflasi.xlsx*)
+
+#### 3. Sasaran Rencana Kerja Pemerintah Tahun 2010-2022
 Sumber: https://bappenas.go.id
 1. Target Indeks Pembangunan Manusia (*IPM.xlsx*)
 2. Target Laju Pertumbuhan Ekonomi (*LPE.xlsx*)
@@ -45,11 +50,11 @@ Sumber: https://bappenas.go.id
 4. Target Persentase Tingkat Kemiskinan (*TK.xlsx*)
 5. Target Rasio Gini (*GINI.xlsx*)
 
-#### 3. Belanja Pemerintah per Fungsi per Provinsi Tahun 2010-2021
+#### 4. Belanja Pemerintah per Fungsi per Provinsi Tahun 2010-2021
 Sumber: https://peta.data-apbn.kemenkeu.go.id  
 Belanja Pemerintah per Fungsi per Provinsi (*Peta APBN Data.csv*)
 
-#### 4. Peta Indonesia
+#### 5. Peta Indonesia
 Sumber: https://github.com/superpikar/indonesia-geojson
 1. Koordinat Peta Indonesia per Provinsi (*indonesia.geojson*)
 2. Mapping Data Provinsi di Peta dengan Data Provinsi dari BPS dan Kemenkeu (*mappingprovinsi.csv*)
@@ -59,7 +64,7 @@ Sumber: https://github.com/superpikar/indonesia-geojson
 1. Main Program (*app.py*)
 2. Utilization Function (*util.py*)
 3. List mapping provinsi dengan data belanja pemerintah per fungsi per provinsi (*mapping.py*)
-4. Program untuk mengakuisisi data (*Proses Akuisisi.py*)
+4. Program untuk mengakuisisi data (*proses_akuisisi.py*)
 5. Requirement Dependencies (*requirements.txt*)
 
 ## Authors
