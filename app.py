@@ -444,9 +444,8 @@ with tab3:
                 
             submitted = st.form_submit_button("Hitung")
             if submitted:
-                
                 X = dflima.iloc[:, 1:4]
-                y = results['dfprov'][[results['dfprov'].columns[0], 'Inflasi', 'KFD']]
+                y = results['dfprovawal'][[results['dfprovawal'].columns[0], 'Inflasi', 'KFD']]
 
                 y_train = X[:12]
                 X_train = y[:12]
