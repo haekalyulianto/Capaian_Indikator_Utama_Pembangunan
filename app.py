@@ -332,7 +332,7 @@ with tab2:
             st.write('')
         with col2:
             st.write('Tingkat Keutamaan Fungsi Anggaran')
-            st.write(dftop3counts.style.applymap(util.is_feature_importance, subset=['Tingkat Keutamaan']))
+            st.write(dftop3counts.style.applymap(util.is_feature_importance, subset=['Keutamaan']))
         with col3:
             st.write('Fungsi Anggaran Utama')
             st.write(dfalltargettop3.iloc[:, :3])
