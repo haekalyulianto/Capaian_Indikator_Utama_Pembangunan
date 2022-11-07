@@ -380,7 +380,7 @@ with tab3:
             with col3:
                 f3 = st.number_input('Anggaran ' + results['dfprovakhir'].columns[3] + ' (Dalam Milyar Rupiah)', value=f3val)
 
-            st.info('Faktor Eksternal')
+            st.info('Faktor Lainnya')
             col1, col2, col3, col4 = st.columns(4)
             
             with col1:
@@ -410,27 +410,27 @@ with tab3:
                 
                 if (target == 'Indeks Pembangunan Manusia'):
                     if y_pred[0] >= 73.41:
-                        st.warning('Mencapai Target RKP')
+                        st.warning('Sudah Mencapai Target RKP')
                     else:
                         st.error('Belum Mencapai Target RKP')
                 elif (target == 'Tingkat Kemiskinan'):
                     if y_pred[0] <= 8.5:
-                        st.warning('Mencapai Target RKP')
+                        st.warning('Sudah Mencapai Target RKP')
                     else:
                         st.error('Belum Mencapai Target RKP')
                 elif (target == 'Rasio Gini'):
                     if y_pred[0] <= 0.376:
-                        st.warning('Mencapai Target RKP')
+                        st.warning('Sudah Mencapai Target RKP')
                     else:
                         st.error('Belum Mencapai Target RKP')
                 elif (target == 'Laju Pertumbuhan Ekonomi'):
                     if y_pred[0] >= 5.2 and y_pred[0] <= 5.5:
-                        st.warning('Mencapai Target RKP')
+                        st.warning('Sudah Mencapai Target RKP')
                     else:
                         st.error('Belum Mencapai Target RKP')
                 else:
-                    if y_pred[0] >= 5.5 and y_pred[0] <= 6.3:
-                        st.warning('Mencapai Target RKP')
+                    if y_pred[0] <= 6.3:
+                        st.warning('Sudah Mencapai Target RKP')
                     else:
                         st.error('Belum Mencapai Target RKP')
         
@@ -457,7 +457,7 @@ with tab3:
             with col4:
                 st.write('')
             
-            st.info('Faktor Eksternal')
+            st.info('Faktor Lainnya')
             col1, col2, col3, col4 = st.columns(4)  
             with col1:
                 st.write('')
