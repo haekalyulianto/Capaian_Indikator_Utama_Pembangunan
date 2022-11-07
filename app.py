@@ -516,23 +516,23 @@ with tab4:
             with col1:
                 st.write('Capaian ' + targets[0] + ' yang Diinginkan: ')
                 f1 = st.number_input('', value=73.46, label_visibility='collapsed')
-                st.write('Target ' + targets[0] + ' RKP Tahun 2022: 73.46')
+                st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">73.46</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target ' + targets[0] + ' RKP Tahun 2022</span></p>', unsafe_allow_html=True)
             with col2:
                 st.write('Capaian ' + targets[1] + ' yang Diinginkan: ')
                 f2 = st.number_input('', value=9.0, label_visibility='collapsed')
-                st.write('Target ' + targets[1] + ' RKP Tahun 2022: 9.0')
+                st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">9.0</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target ' + targets[1] + ' RKP Tahun 2022</span></p>', unsafe_allow_html=True)
             with col3:
                 st.write('Capaian ' + targets[2] + ' yang Diinginkan: ')
                 f3 = st.number_input('', value=0.378, label_visibility='collapsed')
-                st.write('Target ' + targets[2] + ' RKP Tahun 2022: 0.378')
+                st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">0.378</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target ' + targets[2] + ' RKP Tahun 2022</span></p>', unsafe_allow_html=True)
             with col4:
                 st.write('Capaian ' + targets[3] + ' yang Diinginkan: ')
                 f4 = st.number_input('', value=5.5, label_visibility='collapsed')
-                st.write('Target ' + targets[3] + ' RKP Tahun 2022: 5.5')
+                st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">5.5</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target ' + targets[3] + ' RKP Tahun 2022</span></p>', unsafe_allow_html=True)
             with col5:
                 st.write('Capaian ' + targets[4] + ' yang Diinginkan: ')
                 f5 = st.number_input('', value=6.3, label_visibility='collapsed')
-                st.write('Target ' + targets[4] + ' RKP Tahun 2022: 6.3')
+                st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">6.3</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target ' + targets[4] + ' RKP Tahun 2022</span></p>', unsafe_allow_html=True)
 
             st.info('Faktor Eksternal')
             col1, col2, col3, col4 = st.columns(4)  
