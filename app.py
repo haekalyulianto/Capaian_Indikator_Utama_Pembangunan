@@ -7,6 +7,7 @@ import mapping
 from sklearn import ensemble
 from sklearn.multioutput import MultiOutputRegressor
 from collections import Counter
+from streamlit_card import card
 
 def changeprov():
     indexgantiprov = df['provinsi'].loc[lambda x: x==st.session_state.state_name_provinsi].index[0]
@@ -417,17 +418,16 @@ with tab3:
             with col2:
                 f1 = st.number_input('Capaian ' + target + ' yang Diinginkan', value=results['y_test'].iloc[-1:].iloc[0])
             with col3:
-                st.write('Target ' + target + ' pada RKP Tahun 2022:')
                 if (target == 'Indeks Pembangunan Manusia'):
-                    st.write('73.41 - 73.46')
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">73.41 - 73.46</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Indeks Pembangunan Manusia pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
                 elif (target == 'Tingkat Kemiskinan'):
-                    st.write('8.50 - 9.00')
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">8.50 - 9.00</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Tingkat Kemiskinan pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
                 elif (target == 'Rasio Gini'):
-                    st.write('0.376 - 0.378')
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">0.376 - 0.378</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Rasio Gini pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
                 elif (target == 'Laju Pertumbuhan Ekonomi'):
-                    st.write('5.20 - 5.50')
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">5.20 - 5.50</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Laju Pertumbuhan Ekonomi pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
                 else:
-                    st.write('5.50 - 6.30')
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">5.50 - 6.30</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Tingkat Pengangguran Terbuka pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
             with col4:
                 st.write('')
             
