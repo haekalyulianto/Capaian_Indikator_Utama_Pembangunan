@@ -59,10 +59,8 @@ def prediction(dfprov):
     y = dfprov.iloc[:,0]
     
     X_train = X[:10]
-
-    st.warning('ini')
-    st.write(X_train)
     y_train = y[:10]
+    
     X_test = X[10:]
     y_test = y[10:]
 
