@@ -407,6 +407,32 @@ with tab3:
                 y_pred = regressor.predict([[f1, f2, f3, f4, f5]])
 
                 st.metric('Prediksi Capaian ' +target+':', str('{:.3f}'.format(y_pred[0])))
+                
+                if (target == 'Indeks Pembangunan Manusia'):
+                    if y_pred[0] >= 73.41:
+                        st.warning('Mencapai Target RKP')
+                    else:
+                        st.error('Belum Mencapai Target RKP')
+                elif (target == 'Tingkat Kemiskinan'):
+                    if y_pred[0] <= 8.5:
+                        st.warning('Mencapai Target RKP')
+                    else:
+                        st.error('Belum Mencapai Target RKP')
+                elif (target == 'Rasio Gini'):
+                    if y_pred[0] <= 0.376:
+                        st.warning('Mencapai Target RKP')
+                    else:
+                        st.error('Belum Mencapai Target RKP')
+                elif (target == 'Laju Pertumbuhan Ekonomi'):
+                    if y_pred[0] >= 5.2 and y_pred[0] <= 5.5:
+                        st.warning('Mencapai Target RKP')
+                    else:
+                        st.error('Belum Mencapai Target RKP')
+                else:
+                    if y_pred[0] >= 5.5 and y_pred[0] <= 6.3:
+                        st.warning('Mencapai Target RKP')
+                    else:
+                        st.error('Belum Mencapai Target RKP')
         
         st.success('Simulasi Fungsi Anggaran Utama yang Perlu Dikeluarkan untuk Mencapai ' + target + ' yang Diinginkan')
         with st.form("form_2"):
