@@ -67,6 +67,12 @@ with tab1:
         sasaran = 'TPT.xlsx'
         column = ['TPT']
         flag='TPT'
+    
+    column.append("Inflasi")
+    column.append("KFD")
+
+    Inflasi = pd.read_excel('Inflasi.xlsx')
+    KFD = pd.read_excel('KFD.xlsx')
 
     exec('{} = pd.read_excel("{}")'.format(column[0], filetarget))
 
@@ -156,6 +162,10 @@ with tab1:
         filetargets = ['Indeks Pembangunan Manusia.xlsx', 'persentasemiskin.xlsx', 'giniratio.xlsx', 'Laju PDRB.xlsx', 'pengangguran.xlsx']
         sasarans = ['IPM.xlsx', 'TK.xlsx', 'GINI.xlsx', 'LPE.xlsx', 'TPT.xlsx']
         columns = [['IPM'], ['Kemiskinan'], ['Gini'], ['LPE'], ['TPT']]
+
+        for k in range(len(columns)):
+            columns[k].append("Inflasi")
+            columns[k].append("KFD")
 
         for i in range(len(targets)):
             target2 = targets[i]
@@ -253,10 +263,14 @@ with tab2:
             st.write('')
         with col2:
             st.write('Tingkat Keutamaan Fungsi Anggaran')
+            results['importance_df'].drop(results['importance_df']
+            [(results['importance_df']['Fungsi Anggaran'] == 'Inflasi') | (results['importance_df']['Fungsi Anggaran'] == 'KFD')].index, inplace=True)
+            
             st.write(results['importance_df'].style.applymap(util.is_feature_importance, subset=['Keutamaan']))
         with col3:
             st.write('Fungsi Anggaran Utama')
-            st.write(results['dfprov'].iloc[:, 1:])
+            st.write(results['dfprovakhir'].iloc[:, 1:])
+
         with col4:
             st.write('')
 
@@ -278,6 +292,9 @@ with tab2:
         features3 = []
         listsemua = []
         for i in range (len(resultsallcompiled)):
+            resultsallcompiled[i]['importance_df'].drop(resultsallcompiled[i]['importance_df']
+            [(resultsallcompiled[i]['importance_df']['Fungsi Anggaran'] == 'Inflasi') | (resultsallcompiled[i]['importance_df']['Fungsi Anggaran'] == 'KFD')].index, inplace=True)
+            
             features1.append(resultsallcompiled[i]['importance_df']['Fungsi Anggaran'].iloc[0])
             features2.append(resultsallcompiled[i]['importance_df']['Fungsi Anggaran'].iloc[1])
             features3.append(resultsallcompiled[i]['importance_df']['Fungsi Anggaran'].iloc[2])
@@ -342,23 +359,43 @@ with tab3:
 
         st.success('Simulasi ' + target + ' yang Akan Dicapai Berdasarkan Fungsi Anggaran Utama yang Dikeluarkan' )   
 
-        f1val = results['dfprov'].iloc[-1:, 1:][results['dfprov'].iloc[-1:, 1:].columns[0]].iloc[0]
-        f2val = results['dfprov'].iloc[-1:, 1:][results['dfprov'].iloc[-1:, 1:].columns[1]].iloc[0]
-        f3val = results['dfprov'].iloc[-1:, 1:][results['dfprov'].iloc[-1:, 1:].columns[2]].iloc[0]
+        dflima = results['dfprovakhir'].copy()
+        dflima['Inflasi'] = results['dfprovawal']['Inflasi']
+        dflima['KFD'] = results['dfprovawal']['KFD']
 
+        f1val = results['dfprovakhir'].iloc[-1:, 1:][results['dfprovakhir'].iloc[-1:, 1:].columns[0]].iloc[0]
+        f2val = results['dfprovakhir'].iloc[-1:, 1:][results['dfprovakhir'].iloc[-1:, 1:].columns[1]].iloc[0]
+        f3val = results['dfprovakhir'].iloc[-1:, 1:][results['dfprovakhir'].iloc[-1:, 1:].columns[2]].iloc[0]
+        f4val = results['dfprovawal'].iloc[-1:, 1:][results['dfprovawal'].iloc[-1:, 1:].columns[0]].iloc[0]
+        f5val = results['dfprovawal'].iloc[-1:, 1:][results['dfprovawal'].iloc[-1:, 1:].columns[1]].iloc[0]
+    
         with st.form("form_1"):
+            st.info('Faktor Anggaran')
             col1, col2, col3 = st.columns(3)
+            
             with col1:
-                f1 = st.number_input('Anggaran ' + results['dfprov'].columns[1] + ' (Dalam Milyar Rupiah)', value=f1val)
+                f1 = st.number_input('Anggaran ' + results['dfprovakhir'].columns[1] + ' (Dalam Milyar Rupiah)', value=f1val)
             with col2:
-                f2 = st.number_input('Anggaran ' + results['dfprov'].columns[2] + ' (Dalam Milyar Rupiah)', value=f2val)
+                f2 = st.number_input('Anggaran ' + results['dfprovakhir'].columns[2] + ' (Dalam Milyar Rupiah)', value=f2val)
             with col3:
-                f3 = st.number_input('Anggaran ' + results['dfprov'].columns[3] + ' (Dalam Milyar Rupiah)', value=f3val)
-                
+                f3 = st.number_input('Anggaran ' + results['dfprovakhir'].columns[3] + ' (Dalam Milyar Rupiah)', value=f3val)
+
+            st.info('Faktor Eksternal')
+            col1, col2, col3, col4 = st.columns(4)
+            
+            with col1:
+                st.write('')
+            with col2:
+                f4 = st.number_input('Faktor Inflasi (Dalam Milyar Rupiah)', value=f4val)
+            with col3:
+                f5 = st.number_input('Faktor KFD (Dalam Milyar Rupiah)', value=f5val)
+            with col4:
+                st.write('')
+
             submitted = st.form_submit_button("Hitung")
             if submitted:
-
-                X = results['dfprov'].iloc[:, 1:4]
+                
+                X = dflima.iloc[:, 1:6]
                 y = results['dfprov'][[results['dfprov'].columns[0]]]
 
                 X_train = X[:12]
@@ -367,12 +404,13 @@ with tab3:
                 regressor = ensemble.GradientBoostingRegressor(random_state=0)
                 regressor.fit(X_train, y_train)
                 
-                y_pred = regressor.predict([[f1, f2, f3]])
+                y_pred = regressor.predict([[f1, f2, f3, f4, f5]])
 
                 st.metric('Prediksi Capaian ' +target+':', str('{:.3f}'.format(y_pred[0])))
         
         st.success('Simulasi Fungsi Anggaran Utama yang Perlu Dikeluarkan untuk Mencapai ' + target + ' yang Diinginkan')
         with st.form("form_2"):
+            st.info('Faktor Anggaran')
             col1, col2, col3, col4 = st.columns(4)
             with col1:
                 st.write('')
@@ -392,12 +430,23 @@ with tab3:
                     st.write('5.50 - 6.30')
             with col4:
                 st.write('')
+            
+            st.info('Faktor Eksternal')
+            col1, col2, col3, col4 = st.columns(4)  
+            with col1:
+                st.write('')
+            with col2:
+                f2 = st.number_input('Faktor Inflasi (Dalam Milyar Rupiah)', value=f4val)
+            with col3:
+                f3 = st.number_input('Faktor KFD (Dalam Milyar Rupiah)', value=f5val)
+            with col4:
+                st.write('')
                 
             submitted = st.form_submit_button("Hitung")
             if submitted:
                 
-                X = results['dfprov'].iloc[:, 1:4]
-                y = results['dfprov'][[results['dfprov'].columns[0]]]
+                X = dflima.iloc[:, 1:4]
+                y = results['dfprov'][[results['dfprov'].columns[0], 'Inflasi', 'KFD']]
 
                 y_train = X[:12]
                 X_train = y[:12]
@@ -405,7 +454,7 @@ with tab3:
                 regressor = MultiOutputRegressor(ensemble.GradientBoostingRegressor(random_state=0))
                 regressor.fit(X_train, y_train)
                 
-                y_pred = regressor.predict([[f1]])
+                y_pred = regressor.predict([[f1,f2,f3]])
                     
                 percentage1 = ((float(y_pred[:,0:1])-f1val)/f1val)*100
                 percentage2 = ((float(y_pred[:,1:2])-f2val)/f2val)*100
@@ -436,6 +485,7 @@ with tab4:
     if 'results' in locals():
         st.subheader('Simulasi Belanja Pemerintah Per Fungsi terhadap Seluruh Indikator Utama Pembangunan pada Provinsi ' + name_provinsi)
         with st.form("form_3"):
+            st.info('Faktor Anggaran')
             col1, col2, col3, col4, col5 = st.columns(5)
             
             with col1:
@@ -458,6 +508,17 @@ with tab4:
                 st.write('Capaian ' + targets[4] + ' yang Diinginkan: ')
                 f5 = st.number_input('', value=6.3, label_visibility='collapsed')
                 st.write('Target ' + targets[4] + ' RKP Tahun 2022: 6.3')
+
+            st.info('Faktor Eksternal')
+            col1, col2, col3, col4 = st.columns(4)  
+            with col1:
+                st.write('')
+            with col2:
+                f6 = st.number_input('Faktor Inflasi (Dalam Milyar Rupiah)', value=f4val)
+            with col3:
+                f7 = st.number_input('Faktor KFD (Dalam Milyar Rupiah)', value=f5val)
+            with col4:
+                st.write('')
                 
             f1val = dfalltargettop3.iloc[:, 0:1].iloc[len(dfalltargettop3)-1].iloc[0]
             f2val = dfalltargettop3.iloc[:, 1:2].iloc[len(dfalltargettop3)-1].iloc[0]
@@ -465,16 +526,18 @@ with tab4:
 
             submitted = st.form_submit_button("Hitung")
             if submitted:
+                dfalltargettop3['Inflasi'] = dflima['Inflasi'] 
+                dfalltargettop3['KFD'] = dflima['KFD'] 
+                X = dfalltargettop3.iloc[:, 3:10]
                 y = dfalltargettop3.iloc[:, 0:3]
-                X = dfalltargettop3.iloc[:, 3:8]
-
-                y_train = y[:12]
+                
                 X_train = X[:12]
+                y_train = y[:12]
                 
                 regressor = MultiOutputRegressor(ensemble.GradientBoostingRegressor(random_state=0))
                 regressor.fit(X_train, y_train)
                 
-                y_pred = regressor.predict([[f1, f2, f3, f4, f5]])
+                y_pred = regressor.predict([[f1, f2, f3, f4, f5, f6, f7]])
                     
                 percentage1 = ((float(y_pred[:,0:1])-f1val)/f1val)*100
                 percentage2 = ((float(y_pred[:,1:2])-f2val)/f2val)*100
