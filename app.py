@@ -386,9 +386,9 @@ with tab3:
             with col1:
                 st.write('')
             with col2:
-                f4 = st.number_input('Faktor Inflasi (Dalam Milyar Rupiah)', value=f4val)
+                f4 = st.number_input('Faktor Inflasi', value=f4val)
             with col3:
-                f5 = st.number_input('Faktor KFD (Dalam Milyar Rupiah)', value=f5val)
+                f5 = st.number_input('Faktor Kapasitas Fiskal Daerah', value=f5val)
             with col4:
                 st.write('')
 
@@ -436,9 +436,9 @@ with tab3:
             with col1:
                 st.write('')
             with col2:
-                f2 = st.number_input('Faktor Inflasi (Dalam Milyar Rupiah)', value=f4val)
+                f2 = st.number_input('Faktor Inflasi', value=f4val)
             with col3:
-                f3 = st.number_input('Faktor KFD (Dalam Milyar Rupiah)', value=f5val)
+                f3 = st.number_input('Faktor Kapasitas Fiskal Daerah', value=f5val)
             with col4:
                 st.write('')
                 
@@ -514,9 +514,9 @@ with tab4:
             with col1:
                 st.write('')
             with col2:
-                f6 = st.number_input('Faktor Inflasi (Dalam Milyar Rupiah)', value=f4val)
+                f6 = st.number_input('Faktor Inflasi', value=f4val)
             with col3:
-                f7 = st.number_input('Faktor KFD (Dalam Milyar Rupiah)', value=f5val)
+                f7 = st.number_input('Faktor Kapasitas Fiskal Daerah', value=f5val)
             with col4:
                 st.write('')
                 
