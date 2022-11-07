@@ -59,6 +59,9 @@ def prediction(dfprov):
     y = dfprov.iloc[:,0]
     
     X_train = X[:10]
+
+    st.warning('ini')
+    st.write(X_train)
     y_train = y[:10]
     X_test = X[10:]
     y_test = y[10:]
@@ -84,15 +87,24 @@ def prediction(dfprov):
     
     returns['importance_df'] = importance_df
 
+    importance_df2 = importance_df.drop(importance_df
+    [(importance_df['Fungsi Anggaran'] == 'Inflasi') | (importance_df['Fungsi Anggaran'] == 'KFD')].index)
+    
     feature=importance_df.iloc[:3,:1].T.values.tolist()
     flat_list = [item for sublist in feature for item in sublist]
     flat_list.append(namakolom)
 
+    feature2=importance_df2.iloc[:3,:1].T.values.tolist()
+    flat_list2 = [item for sublist in feature2 for item in sublist]
+    flat_list2.append(namakolom)
+
     returns['dfprovawal'] = dfprov
+    dfprov2 = dfprov[dfprov.columns.intersection(flat_list2)]
     dfprov = dfprov[dfprov.columns.intersection(flat_list)]
 
     returns['dfprov'] = dfprov
-
+    returns['dfprovakhir'] = dfprov2
+    
     return returns
 
 def is_feature_importance(temp):
