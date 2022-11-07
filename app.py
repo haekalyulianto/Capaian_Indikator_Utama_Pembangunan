@@ -7,7 +7,6 @@ import mapping
 from sklearn import ensemble
 from sklearn.multioutput import MultiOutputRegressor
 from collections import Counter
-from streamlit_card import card
 
 def changeprov():
     indexgantiprov = df['provinsi'].loc[lambda x: x==st.session_state.state_name_provinsi].index[0]
