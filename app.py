@@ -325,7 +325,7 @@ with tab2:
             lsa.append(sorted_by_second[i][0])
             lsb.append(sorted_by_second[i][1]/15)
 
-        dftop3counts = pd.DataFrame({'Fungsi Anggaran':lsa, 'Tingkat Keutamaan': lsb})
+        dftop3counts = pd.DataFrame({'Fungsi Anggaran':lsa, 'Keutamaan': lsb})
 
         col1, col2, col3, col4 = st.columns(4)
         with col1:
