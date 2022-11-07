@@ -437,25 +437,31 @@ with tab3:
         st.success('Simulasi Fungsi Anggaran Utama yang Perlu Dikeluarkan untuk Mencapai ' + target + ' yang Diinginkan')
         with st.form("form_2"):
             st.info('Faktor Anggaran')
-            col1, col2, col3, col4 = st.columns(4)
+            col1, col2, col3 = st.columns(3)
             with col1:
                 st.write('')
             with col2:
                 f1 = st.number_input('Capaian ' + target + ' yang Diinginkan', value=results['y_test'].iloc[-1:].iloc[0])
             with col3:
-                if (target == 'Indeks Pembangunan Manusia'):
-                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">73.41 - 73.46</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Indeks Pembangunan Manusia pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
-                elif (target == 'Tingkat Kemiskinan'):
-                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">8.50 - 9.00</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Tingkat Kemiskinan pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
-                elif (target == 'Rasio Gini'):
-                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">0.376 - 0.378</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Rasio Gini pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
-                elif (target == 'Laju Pertumbuhan Ekonomi'):
-                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">5.20 - 5.50</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Laju Pertumbuhan Ekonomi pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
-                else:
-                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">5.50 - 6.30</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Tingkat Pengangguran Terbuka pada RKP Tahun 2022</span></p>', unsafe_allow_html=True)
-            with col4:
                 st.write('')
-            
+                
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.write('')
+            with col2:
+                if (target == 'Indeks Pembangunan Manusia'):
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">73.41 - 73.46</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Indeks Pembangunan Manusia RKP Tahun 2022</span></p>', unsafe_allow_html=True)
+                elif (target == 'Tingkat Kemiskinan'):
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">8.50 - 9.00</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Tingkat Kemiskinan RKP Tahun 2022</span></p>', unsafe_allow_html=True)
+                elif (target == 'Rasio Gini'):
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">0.376 - 0.378</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Rasio Gini RKP Tahun 2022</span></p>', unsafe_allow_html=True)
+                elif (target == 'Laju Pertumbuhan Ekonomi'):
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">5.20 - 5.50</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Laju Pertumbuhan Ekonomi RKP Tahun 2022</span></p>', unsafe_allow_html=True)
+                else:
+                    st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">5.50 - 6.30</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target Tingkat Pengangguran Terbuka RKP Tahun 2022</span></p>', unsafe_allow_html=True)
+            with col3:
+                st.write('')
+                
             st.info('Faktor Lainnya')
             col1, col2, col3, col4 = st.columns(4)  
             with col1:
