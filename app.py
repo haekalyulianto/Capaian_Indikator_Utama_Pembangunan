@@ -392,7 +392,7 @@ with tab3:
             with col4:
                 st.write('')
 
-            submitted = st.form_submit_button("Hitung")
+            submitted = st.form_submit_button("Hitung", on_click=changeprov)
             if submitted:
                 
                 X = dflima.iloc[:, 1:6]
@@ -473,7 +473,7 @@ with tab3:
             with col4:
                 st.write('')
                 
-            submitted = st.form_submit_button("Hitung")
+            submitted = st.form_submit_button("Hitung", on_click=changeprov)
             if submitted:
                 X = dflima.iloc[:, 1:4]
                 y = results['dfprovawal'][[results['dfprovawal'].columns[0], 'Inflasi', 'KFD']]
@@ -554,7 +554,7 @@ with tab4:
             f2val = dfalltargettop3.iloc[:, 1:2].iloc[len(dfalltargettop3)-1].iloc[0]
             f3val = dfalltargettop3.iloc[:, 2:3].iloc[len(dfalltargettop3)-1].iloc[0]
 
-            submitted = st.form_submit_button("Hitung")
+            submitted = st.form_submit_button("Hitung", on_click=changeprov)
             if submitted:
                 dfalltargettop3['Inflasi'] = dflima['Inflasi'] 
                 dfalltargettop3['KFD'] = dflima['KFD'] 
