@@ -539,7 +539,7 @@ with tab4:
                 f5 = st.number_input('', value=6.3, label_visibility='collapsed')
                 st.markdown('<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"><p style="background-color: rgb(220, 137, 40); color: rgb(250, 250, 250); font-size: 34px; border-radius: 7px; padding-left: 12px; padding-top: 6px; padding-bottom: 6px; line-height: 27px;"><span style="color: rgb(0, 0, 0)">6.3</span><br><span style="font-size: 18px; margin-top: 0px; color: white; line-height: 5px;">Target ' + targets[4] + ' RKP Tahun 2022</span></p>', unsafe_allow_html=True)
 
-            st.info('Faktor Eksternal')
+            st.info('Faktor Lainnya')
             col1, col2, col3, col4 = st.columns(4)  
             with col1:
                 st.write('')
